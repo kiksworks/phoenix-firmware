@@ -163,7 +163,7 @@ void WheelController::update(bool new_parameters, bool sensor_only) {
     // 車体速度を推定する
     _gravity_filter.update(motion.accelerometer, motion.gyroscope);
     _velocity_filter.update(bodyAcceleration(), motion.gyroscope, wheel_velocity, motion.wheel_current_q);
-    if (!isfinite(bodyVelocity()[0]) || !isfinite(bodyVelocity()[1]) || !isfinite(bodyVelocity()[2])) {
+    if (!std::isfinite(bodyVelocity()[0]) || !std::isfinite(bodyVelocity()[1]) || !std::isfinite(bodyVelocity()[2])) {
         CentralizedMonitor::setErrorFlags(ErrorCauseArithmetic);
         return;
     }

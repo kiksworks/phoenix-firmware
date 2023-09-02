@@ -2,7 +2,7 @@
 *                                                                             *
 * License Agreement                                                           *
 *                                                                             *
-* Copyright (c) 2004 Altera Corporation, San Jose, California, USA.           *
+* Copyright (c) 2017,2004 Altera Corporation, San Jose, California, USA.      *
 * All rights reserved.                                                        *
 *                                                                             *
 * Permission is hereby granted, free of charge, to any person obtaining a     *
@@ -66,7 +66,7 @@ int alt_alarm_start (alt_alarm* alarm, alt_u32 nticks,
                      void* context)
 {
   alt_irq_context irq_context;
-  alt_u32 current_nticks = 0;
+  alt_u64 current_nticks = 0;
   
   if (alt_ticks_per_second ())
   {
@@ -79,22 +79,8 @@ int alt_alarm_start (alt_alarm* alarm, alt_u32 nticks,
       
       current_nticks = alt_nticks();
       
-      alarm->time = nticks + current_nticks + 1; 
-      
-      /* 
-       * If the desired alarm time causes a roll-over, set the rollover
-       * flag. This will prevent the subsequent tick event from causing
-       * an alarm too early.
-       */
-      if(alarm->time < current_nticks)
-      {
-        alarm->rollover = 1;
-      }
-      else
-      {
-        alarm->rollover = 0;
-      }
-    
+      alarm->time = (alt_u64)nticks + current_nticks + 1; 
+          
       alt_llist_insert (&alt_alarm_list, &alarm->llist);
       alt_irq_enable_all (irq_context);
 
