@@ -27,6 +27,7 @@ struct MotionData_t {
     Eigen::Vector4f wheel_current_q;
     Eigen::Vector3f body_acceleration;
     Eigen::Vector3f body_velocity;
+    Eigen::Vector4f wheel_kf;
 };
 
 /// 制御に関するデータ
