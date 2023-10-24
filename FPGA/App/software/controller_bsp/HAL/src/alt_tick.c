@@ -2,7 +2,7 @@
 *                                                                             *
 * License Agreement                                                           *
 *                                                                             *
-* Copyright (c) 2004 Altera Corporation, San Jose, California, USA.           *
+* Copyright (c) 2017,2004 Altera Corporation, San Jose, California, USA.      *
 * All rights reserved.                                                        *
 *                                                                             *
 * Permission is hereby granted, free of charge, to any person obtaining a     *
@@ -48,7 +48,7 @@ alt_u32 _alt_tick_rate = 0;
  * reset. 
  */
 
-volatile alt_u32 _alt_nticks = 0;
+volatile alt_u64 _alt_nticks = 0;
 
 /*
  * "alt_alarm_list" is the head of a linked list of registered alarms. This is
@@ -94,25 +94,15 @@ void alt_tick (void)
   /* update the tick counter */
 
   _alt_nticks++;
-
+ 
   /* process the registered callbacks */
 
   while (alarm != (alt_alarm*) &alt_alarm_list)
   {
     next = (alt_alarm*) alarm->llist.next;
-
-    /* 
-     * Upon the tick-counter rolling over it is safe to clear the 
-     * roll-over flag; once the flag is cleared this (or subsequnt)
-     * tick events are enabled to generate an alarm event. 
-     */
-    if ((alarm->rollover) && (_alt_nticks == 0))
-    {
-      alarm->rollover = 0;
-    }
     
     /* if the alarm period has expired, make the callback */    
-    if ((alarm->time <= _alt_nticks) && (alarm->rollover == 0))
+    if (alarm->time <= _alt_nticks)
     {
       next_callback = alarm->callback (alarm->context);
 
@@ -125,16 +115,6 @@ void alt_tick (void)
       else
       {
         alarm->time += next_callback;
-        
-        /* 
-         * If the desired alarm time causes a roll-over, set the rollover
-         * flag. This will prevent the subsequent tick event from causing
-         * an alarm too early.
-         */
-        if(alarm->time < _alt_nticks)
-        {
-          alarm->rollover = 1;
-        }
       }
     }
     alarm = next;

@@ -76,7 +76,6 @@ extern void alt_avalon_timer_sc_init (void* base, alt_u32 irq_controller_id,
  * Variables used to store the timestamp parameters, when the device is to be
  * accessed using the high resolution timestamp driver.
  */
-
 extern void*   altera_avalon_timer_ts_base;
 extern alt_u32 altera_avalon_timer_ts_freq;
 
@@ -85,7 +84,6 @@ extern alt_u32 altera_avalon_timer_ts_freq;
  * allocate any per device memory that may be required. In this case no 
  * allocation is necessary.
  */ 
-
 #define ALTERA_AVALON_TIMER_INSTANCE(name, dev) extern int alt_no_storage
 
 /*
@@ -93,7 +91,6 @@ extern alt_u32 altera_avalon_timer_ts_freq;
  * somewhat fearsome, when compiled with -O2 it will be resolved at compile 
  * time to a constant value.
  */
-
 #define ALTERA_AVALON_TIMER_FREQ(freq, period, units) \
   strcmp (units, "us") ?                              \
     (strcmp (units, "ms") ?                           \
@@ -108,12 +105,17 @@ extern alt_u32 altera_avalon_timer_ts_freq;
  * timestamp device. These are used below to determine which driver to use for
  * a given timer.
  */
-
 #define __ALT_CLK_BASE(name) name##_BASE
 #define _ALT_CLK_BASE(name) __ALT_CLK_BASE(name)
 
 #define ALT_SYS_CLK_BASE _ALT_CLK_BASE(ALT_SYS_CLK)
 #define ALT_TIMESTAMP_CLK_BASE _ALT_CLK_BASE(ALT_TIMESTAMP_CLK)
+
+#define __ALT_CLK_SPAN(name) name##_SPAN
+#define _ALT_CLK_SPAN(name) __ALT_CLK_SPAN(name)
+
+#define ALT_SYS_CLK_SPAN _ALT_CLK_SPAN(ALT_SYS_CLK)
+#define ALT_TIMESTAMP_CLK_SPAN _ALT_CLK_SPAN(ALT_TIMESTAMP_CLK)
 
 /*
  * If there is no system clock, then the above macro will result in 
@@ -121,8 +123,39 @@ extern alt_u32 altera_avalon_timer_ts_freq;
  * invalid value for this, so that no timer is wrongly identified as the system
  * clock.
  */
-
 #define none_BASE 0xffffffff
+
+/* 
+ * This aims to determine if ALT_SYS_CLK_BASE is defined, but has no value.
+ * In that case we must assign it an integer value to avoid a compilation error
+ * in the INIT macro below. This is the case when the CPU itelf provides the timing
+ * functionality for the HAL. Either the address span is indeed 0 (I'm assuming that's
+ * illegal) or it's merely defined to something that when expanded is not replaced,
+ * and is syntactically treated as 0 --> e.g. ALT_SYS_CLK_BASE is defined to CPU_BASE,
+ * where CPU_BASE is not defined. The trick played here is to look at another
+ * common slave parameter for which 0 is not a legal value to disambiguate the
+ * "timer is connected at address 0x0" case from "CPU_BASE is undefined" case.
+ */
+#if ALT_SYS_CLK_SPAN==0
+#undef ALT_SYS_CLK_BASE
+#define ALT_SYS_CLK_BASE none_BASE
+#endif
+
+/* 
+ * This aims to determine if ALT_TIMESTAMP_CLK_BASE is defined, but has no value.
+ * In that case we must assign it an integer value to avoid a compilation error
+ * in the INIT macro below. This is the case when the CPU itelf provides the timing
+ * functionality for the HAL. Either the address span is indeed 0 (I'm assuming that's
+ * illegal) or it's merely defined to something that when expanded is not replaced,
+ * and is syntactically treated as 0 --> e.g. ALT_TIMESTAMP_CLK_BASE is defined to CPU_BASE,
+ * where CPU_BASE is not defined. The trick played here is to look at another
+ * common slave parameter for which 0 is not a legal value to disambiguate the
+ * "timer is connected at address 0x0" case from "CPU_BASE is undefined" case.
+ */
+#if ALT_TIMESTAMP_CLK_SPAN==0
+#undef ALT_TIMESTAMP_CLK_BASE
+#define ALT_TIMESTAMP_CLK_BASE none_BASE
+#endif
 
 /*
  * ALTERA_AVALON_TIMER_INIT is the macro used by alt_sys_init() to provide
