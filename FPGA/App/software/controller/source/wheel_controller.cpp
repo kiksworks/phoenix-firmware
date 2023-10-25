@@ -123,6 +123,7 @@ void WheelController::stopControl(void) {
 void WheelController::initializeState(void) {
     _gravity_filter.reset();
     _velocity_filter.reset();
+    _imu_velocity_filter.reset();
     _imu_lpf[0].reset();
     _imu_lpf[1].reset();
     _imu_lpf[2].reset();
@@ -179,7 +180,10 @@ void WheelController::update(bool new_parameters, bool sensor_only) {
     _current_filted(1) = _current_lpf[1](motion.wheel_current_q(1));
     _current_filted(2) = _current_lpf[2](motion.wheel_current_q(2));
     _current_filted(3) = _current_lpf[3](motion.wheel_current_q(3));
-    _velocity_filter.update(_acc_filted, motion.gyroscope, wheel_velocity, _current_filted);
+    //_velocity_filter.update(_acc_filted, motion.gyroscope, wheel_velocity, _current_filted);
+    //_imu_velocity_filter.update(_acc_filted, motion.gyroscope);
+    _velocity_filter.update(bodyAcceleration(), motion.gyroscope, wheel_velocity, motion.wheel_current_q);
+    _imu_velocity_filter.update(motion.accelerometer, motion.gyroscope);
     if (!std::isfinite(bodyVelocity()[0]) || !std::isfinite(bodyVelocity()[1]) || !std::isfinite(bodyVelocity()[2])) {
         CentralizedMonitor::setErrorFlags(ErrorCauseArithmetic);
         return;
@@ -336,7 +340,8 @@ float WheelController::limitPower(float velocity) {
 
 GravityFilter WheelController::_gravity_filter;
 VelocityFilter WheelController::_velocity_filter;
-Lpf2ndOrder50 WheelController::_imu_lpf[3];
+ImuVelocityFilter WheelController::_imu_velocity_filter;
+Lpf2ndOrder200 WheelController::_imu_lpf[3];
 Lpf2ndOrder200 WheelController::_current_lpf[4];
 Hpf1stOrder5 WheelController::_error_hpf[4];
 Eigen::Vector3f WheelController::_acc_filted;

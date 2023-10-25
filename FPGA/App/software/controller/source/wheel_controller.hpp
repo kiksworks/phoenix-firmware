@@ -10,6 +10,7 @@
 #include <Eigen/Core>
 #include "filter/gravity_filter.hpp"
 #include "filter/velocity_filter.hpp"
+#include "filter/imu_velocity_filter.hpp"
 #include "filter/acceleration_limitter.hpp"
 #include "filter/hpf.hpp"
 #include "filter/lpf.hpp"
@@ -60,6 +61,14 @@ public:
     }
 
     /**
+     * @brief IMU速度フィルタへアクセスする
+     * @return IMU速度フィルタ
+     */
+    static const ImuVelocityFilter& imuVelocityFilter(void) {
+        return _imu_velocity_filter;
+    }
+
+    /**
      * @brief 車体加速度の推定値を取得する
      * @return 車体加速度 X, Y, Z [m/s^2]
      */
@@ -73,6 +82,14 @@ public:
      */
     static Eigen::Vector3f bodyVelocity(void) {
         return _velocity_filter.bodyVelocity();
+    }
+
+    /**
+     * @brief 車体速度の推定値を取得する
+     * @return 車体速度 X [m/s], Y [m/s], ω [rad/s]
+     */
+    static Eigen::Vector3f imuBodyVelocity(void) {
+        return _imu_velocity_filter.bodyVelocity();
     }
 
     /**
@@ -118,6 +135,9 @@ private:
 
     /// IMUとエンコーダから車体速度を求めるカルマンフィルタ
     static VelocityFilter _velocity_filter;
+    
+    /// IMUから車体速度を求めるフィルタ
+    static ImuVelocityFilter _imu_velocity_filter;
 
     /// IMUの値をフィルタリングするLPF
     static Lpf2ndOrder200 _imu_lpf[3];

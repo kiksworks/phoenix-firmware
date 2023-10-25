@@ -43,9 +43,9 @@ void DataHolder::fetchOnPostControlLoop(void) {
     _motion_data.body_acceleration = WheelController::gravityFilter().acceleration();
     _motion_data.body_velocity = WheelController::velocityFilter().bodyVelocity();
     _motion_data.wheel_kf = WheelController::velocityFilter().frictionCoefficients();
-    _motion_data.tmp(0) = WheelController::accFilted()(0);
-    _motion_data.tmp(1) = WheelController::accFilted()(1);
-    _motion_data.tmp(2) = WheelController::accFilted()(2);
+    _motion_data.tmp(0) = WheelController::imuVelocityFilter().bodyVelocity()(0);
+    _motion_data.tmp(1) = WheelController::imuVelocityFilter().bodyVelocity()(1);
+    _motion_data.tmp(2) = WheelController::imuVelocityFilter().bodyVelocity()(2);
     _motion_data.tmp(3) = WheelController::currentFilted()(0);
     _control_data.current_ref(0) = VectorController::getCurrentReferenceQ(1) * ADC1_CURRENT_SCALE;
     _control_data.current_ref(1) = VectorController::getCurrentReferenceQ(2) * ADC1_CURRENT_SCALE;
