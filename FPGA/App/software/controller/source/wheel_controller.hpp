@@ -12,6 +12,7 @@
 #include "filter/velocity_filter.hpp"
 #include "filter/acceleration_limitter.hpp"
 #include "filter/hpf.hpp"
+#include "filter/lpf.hpp"
 
 /**
  * 車輪制御を行う
@@ -82,6 +83,18 @@ public:
         return _ref_body_accel;
     }
 
+    /**
+     * @brief フィルタ後のIMUの値を取得する
+     * @return  X [m/s^2], Y [m/s^2], ω [rad/s^2]
+     */
+    static Eigen::Vector3f accFilted(void) {
+        return _acc_filted;
+    }
+
+    static Eigen::Vector4f currentFilted(void) {
+            return _current_filted;
+    }
+
 private:
     /**
      * 制御情報をクリアする
@@ -106,8 +119,20 @@ private:
     /// IMUとエンコーダから車体速度を求めるカルマンフィルタ
     static VelocityFilter _velocity_filter;
 
+    /// IMUの値をフィルタリングするLPF
+    static Lpf2ndOrder200 _imu_lpf[3];
+
+    /// 電流の値をフィルタリングするLPF
+    static Lpf2ndOrder200 _current_lpf[4];
+
     /// 誤差の不完全微分を行うHPF
     static Hpf1stOrder5 _error_hpf[4];
+
+    /// フィルタリングされたIMUの値
+    static Eigen::Vector3f _acc_filted;
+
+    /// フィルタリングされた電流の値
+    static Eigen::Vector4f _current_filted;
 
     /// 車体加速度の指令値
     static Eigen::Vector4f _ref_body_accel;
