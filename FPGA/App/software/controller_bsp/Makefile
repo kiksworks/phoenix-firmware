@@ -27,8 +27,8 @@ SPACE := $(empty) $(empty)
 # This will ensure paths are readable by GNU Make.
 #------------------------------------------------------------------------------
 
-UNAME = $(shell uname -r | tr A-Z a-z)
-ifeq ($(findstring microsoft,$(UNAME)),microsoft)
+UNAME = $(shell uname -r)
+ifeq ($(findstring Microsoft,$(UNAME)),Microsoft)
 	WINDOWS_EXE = .exe
 endif
 
@@ -93,12 +93,12 @@ OBJ_DIR := ./obj
 
 # This following VERSION comment indicates the version of the tool used to 
 # generate this makefile. A makefile variable is provided for VERSION as well. 
-# ACDS_VERSION: 22.1
-ACDS_VERSION := 22.1
+# ACDS_VERSION: 20.1
+ACDS_VERSION := 20.1
 
 # This following BUILD_NUMBER comment indicates the build number of the tool 
 # used to generate this makefile. 
-# BUILD_NUMBER: 917
+# BUILD_NUMBER: 720
 
 SETTINGS_FILE := settings.bsp
 SOPC_FILE := ../../controller.sopcinfo
@@ -210,7 +210,7 @@ GENERATED_C_LIB_SRCS += alt_sys_init.c
 # each source file type (C, assembly, etc.) is concatenated together and used
 # to construct a list of objects. Pattern rules to build each object are then
 # used to build each file.
-
+#-------------------------------------------------------------------------------
 
 # altera_avalon_jtag_uart_driver sources root 
 altera_avalon_jtag_uart_driver_SRCS_ROOT := drivers
@@ -568,16 +568,6 @@ build_pre_process :
 
 build_post_process :
 	$(BUILD_POST_PROCESS)
-
-
-ifneq ($(LICENSE_NOTICE_TEXT),)
-build_post_process : $(OBJ_DIR)/emit_license_notice
-
-$(OBJ_DIR)/emit_license_notice: $(LICENSE_NOTICE_TEXT)
-	@cat $<
-	@$(MKDIR) $(@D)
-	@touch $@
-endif #LICENCE_NOTICE_TEXT set
 
 .PHONY: build_pre_process build_post_process
 

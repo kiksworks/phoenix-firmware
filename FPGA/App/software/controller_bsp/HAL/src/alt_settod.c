@@ -2,7 +2,7 @@
 *                                                                             *
 * License Agreement                                                           *
 *                                                                             *
-* Copyright (c) 2017,2004 Altera Corporation, San Jose, California, USA.      *
+* Copyright (c) 2004 Altera Corporation, San Jose, California, USA.           *
 * All rights reserved.                                                        *
 *                                                                             *
 * Permission is hereby granted, free of charge, to any person obtaining a     *
@@ -72,7 +72,7 @@ extern struct timeval  alt_resettime;
 int ALT_SETTIMEOFDAY (const struct timeval  *t,
                       const struct timezone *tz)
 {
-  alt_u64 nticks    = alt_nticks ();
+  alt_u32 nticks    = alt_nticks ();
   alt_u32 tick_rate = alt_ticks_per_second ();
 
   /* If there is a system clock available, update the current time */
