@@ -25,25 +25,25 @@
 using namespace Eigen;
 
 /// 車輪速度の標準偏差 [m/s]
-static constexpr float SIGMA_VELOCITY = 0.002f;
+static constexpr float SIGMA_VELOCITY = 0.03f;
 
 /// 電流測定値の標準偏差 [A]
 static constexpr float SIGMA_CURRENT = 0.01f;
 
 /// 加速度センサーの標準偏差 [m/s^2]
-static constexpr float SIGMA_ACCELEROMETER = 0.01f;
+static constexpr float SIGMA_ACCELEROMETER = 0.002f;
 
 /// ジャイロセンサーの標準偏差 [rad/s]
-static constexpr float SIGMA_GYROSCOPE = 0.01f;
+static constexpr float SIGMA_GYROSCOPE = 0.002f;
 
 /// 摩擦係数の変化割合
 static constexpr float SIGMA_KF = 100.0f;
 
 /// 摩擦係数の最小値
-static constexpr float MIN_KF = 0.01f;
+static constexpr float MIN_KF = 0.5f;
 
 /// 摩擦係数の最大値
-static constexpr float MAX_KF = 20.0f;
+static constexpr float MAX_KF = 100.0f;
 
 /**
  * @brief wheel_velocity - velocity を計算する

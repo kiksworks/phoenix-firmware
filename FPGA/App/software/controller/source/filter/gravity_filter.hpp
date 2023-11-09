@@ -32,8 +32,8 @@ public:
     void update(const Eigen::Vector3f& accel, const Eigen::Vector3f& gyro) {
         using namespace Eigen;
 
-        static constexpr float GYRO_GAIN_P = 1.0;
-        static constexpr float GYRO_GAIN_I = 0.001;
+        static constexpr float GYRO_GAIN_P = 0.01f;
+        static constexpr float GYRO_GAIN_I = 0.001f;
         static constexpr float GRAVITY_LOW_THRESHOLD = 0.0625f;
         static constexpr float GRAVITY_COMPENSATION = 0.001f;
 

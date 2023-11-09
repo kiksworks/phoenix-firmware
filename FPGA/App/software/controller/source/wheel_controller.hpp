@@ -145,6 +145,8 @@ private:
     /// 電流の値をフィルタリングするLPF
     static Lpf2ndOrder200 _current_lpf[4];
 
+    static Lpf2ndOrder200 _wheel_lpf[4];
+
     /// 誤差の不完全微分を行うHPF
     static Hpf1stOrder5 _error_hpf[4];
 
@@ -153,6 +155,8 @@ private:
 
     /// フィルタリングされた電流の値
     static Eigen::Vector4f _current_filted;
+
+    static Eigen::Vector4f _wheel_vel_filted;
 
     /// 車体加速度の指令値
     static Eigen::Vector4f _ref_body_accel;

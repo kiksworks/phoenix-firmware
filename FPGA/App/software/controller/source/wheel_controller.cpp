@@ -131,12 +131,17 @@ void WheelController::initializeState(void) {
     _current_lpf[1].reset();
     _current_lpf[2].reset();
     _current_lpf[3].reset();
+    _wheel_lpf[0].reset();
+    _wheel_lpf[1].reset();
+    _wheel_lpf[2].reset();
+    _wheel_lpf[3].reset();
     _error_hpf[0].reset();
     _error_hpf[1].reset();
     _error_hpf[2].reset();
     _error_hpf[3].reset();
     _acc_filted.setZero();
     _current_filted.setZero();
+    _wheel_vel_filted.setZero();
     _ref_body_accel.setZero();
     _ref_wheel_current.setZero();
     _regeneration_energy.setZero();
@@ -173,16 +178,20 @@ void WheelController::update(bool new_parameters, bool sensor_only) {
     // 車体速度を推定する
     _gravity_filter.update(motion.accelerometer, motion.gyroscope);
 
-    _acc_filted(0) = _imu_lpf[0](bodyAcceleration().x());
-    _acc_filted(1) = _imu_lpf[1](bodyAcceleration().y());
-    _acc_filted(2) = _imu_lpf[2](bodyAcceleration().z());
+    _acc_filted(0) = _imu_lpf[0](motion.accelerometer.x());
+    _acc_filted(1) = _imu_lpf[1](motion.accelerometer.y());
+    _acc_filted(2) = _imu_lpf[2](motion.accelerometer.z());
     _current_filted(0) = _current_lpf[0](motion.wheel_current_q(0));
     _current_filted(1) = _current_lpf[1](motion.wheel_current_q(1));
     _current_filted(2) = _current_lpf[2](motion.wheel_current_q(2));
     _current_filted(3) = _current_lpf[3](motion.wheel_current_q(3));
+    _wheel_vel_filted(0) = _wheel_lpf[0](wheel_velocity(0));
+    _wheel_vel_filted(1) = _wheel_lpf[1](wheel_velocity(1));
+    _wheel_vel_filted(2) = _wheel_lpf[2](wheel_velocity(2));
+    _wheel_vel_filted(3) = _wheel_lpf[3](wheel_velocity(3));
     //_velocity_filter.update(_acc_filted, motion.gyroscope, wheel_velocity, _current_filted);
     //_imu_velocity_filter.update(_acc_filted, motion.gyroscope);
-    _velocity_filter.update(bodyAcceleration(), motion.gyroscope, wheel_velocity, motion.wheel_current_q);
+    _velocity_filter.update(motion.accelerometer, motion.gyroscope, _wheel_vel_filted, _current_filted);
     _imu_velocity_filter.update(motion.accelerometer, motion.gyroscope);
     if (!std::isfinite(bodyVelocity()[0]) || !std::isfinite(bodyVelocity()[1]) || !std::isfinite(bodyVelocity()[2])) {
         CentralizedMonitor::setErrorFlags(ErrorCauseArithmetic);
@@ -343,9 +352,11 @@ VelocityFilter WheelController::_velocity_filter;
 ImuVelocityFilter WheelController::_imu_velocity_filter;
 Lpf2ndOrder200 WheelController::_imu_lpf[3];
 Lpf2ndOrder200 WheelController::_current_lpf[4];
+Lpf2ndOrder200 WheelController::_wheel_lpf[4];
 Hpf1stOrder5 WheelController::_error_hpf[4];
 Eigen::Vector3f WheelController::_acc_filted;
 Eigen::Vector4f WheelController::_current_filted;
+Eigen::Vector4f WheelController::_wheel_vel_filted;
 Eigen::Vector4f WheelController::_ref_body_accel;
 Eigen::Vector4f WheelController::_ref_wheel_current;
 Eigen::Vector4f WheelController::_regeneration_energy;
