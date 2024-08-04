@@ -13,19 +13,19 @@
 using namespace Eigen;
 
 /// 車輪速度の標準偏差 [m/s]
-static constexpr float SIGMA_VELOCITY_X = 0.005f;
+static constexpr float SIGMA_VELOCITY_X = 0.01f;
 
 /// 車輪速度の標準偏差 [m/s]
-static constexpr float SIGMA_VELOCITY_Y = 0.005f;
+static constexpr float SIGMA_VELOCITY_Y = 0.01f;
 
 /// 車輪速度の標準偏差 [m/s]
 static constexpr float SIGMA_VELOCITY_OMEGA = 0.005f;
 
 /// 加速度センサーの標準偏差 [m/s^2]
-static constexpr float SIGMA_ACCELEROMETER = 0.1f;
+static constexpr float SIGMA_ACCELEROMETER = 0.005f;
 
 /// ジャイロセンサーの標準偏差 [rad/s]
-static constexpr float SIGMA_GYROSCOPE = 0.1f;
+static constexpr float SIGMA_GYROSCOPE = 0.005f;
 
 void SimpleVelocityFilter::reset(void) {
     _x.setZero();

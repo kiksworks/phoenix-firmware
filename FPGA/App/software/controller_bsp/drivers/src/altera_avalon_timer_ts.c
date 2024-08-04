@@ -33,19 +33,23 @@
 #include <string.h>
 
 #include "system.h"
-#include "sys/alt_timestamp.h"
 
 #include "altera_avalon_timer.h"
 #include "altera_avalon_timer_regs.h"
 
+#include "sys/alt_timestamp.h"
+
 #include "alt_types.h"
+
+// This needs to be kept in sync with the _hw.tcl
+#define ALTERA_AVALON_TIMER_DEVICE_TYPE 1
 
 /*
  * These functions are only available if a timestamp device has been selected
  * for this system.
  */
-
-#if (ALT_TIMESTAMP_CLK_BASE != none_BASE) 
+#if (ALT_TIMESTAMP_CLK_TIMER_DEVICE_TYPE == ALTERA_AVALON_TIMER_DEVICE_TYPE)
+#if (ALT_TIMESTAMP_CLK_BASE != none_BASE)
 
 /*
  * The function alt_timestamp_start() can be called at application level to
@@ -141,3 +145,4 @@ alt_u32 alt_timestamp_freq(void)
 }
 
 #endif /* timestamp available */
+#endif

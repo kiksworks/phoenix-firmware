@@ -4,7 +4,7 @@
  * Machine generated for CPU 'nios_0' in SOPC Builder design 'controller'
  * SOPC Builder design path: ../../controller.sopcinfo
  *
- * Generated: Mon Jul 22 21:59:40 JST 2024
+ * Generated: Mon Aug 05 03:50:10 JST 2024
  */
 
 /*
@@ -200,7 +200,8 @@ SECTIONS
         *(.preinit_array)
         PROVIDE (__preinit_array_end = ABSOLUTE(.));
         PROVIDE (__init_array_start = ABSOLUTE(.));
-        *(.init_array)
+        KEEP(*(SORT_BY_INIT_PRIORITY(.init_array.*)));
+        KEEP(*(.init_array));
         PROVIDE (__init_array_end = ABSOLUTE(.));
         PROVIDE (__fini_array_start = ABSOLUTE(.));
         *(.fini_array)

@@ -48,6 +48,7 @@
 
 void alt_dcache_flush_no_writeback (void* start, alt_u32 len)
 {
+#if NIOS2_DCACHE_SIZE > 0
   char* i;
   char* end = ((char*) start) + len; 
 
@@ -66,4 +67,5 @@ void alt_dcache_flush_no_writeback (void* start, alt_u32 len)
   {
     ALT_FLUSH_DATA_NO_WRITEBACK(i);
   }
+#endif /* NIOS2_DCACHE_SIZE > 0 */
 }
