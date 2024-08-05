@@ -8,6 +8,7 @@
 #pragma once
 
 #include <Eigen/Core>
+#include <Eigen/LU>
 
 /**
  * @brief IMUの測定値とオドメトリから車体速度を推定する
