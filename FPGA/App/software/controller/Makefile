@@ -100,8 +100,8 @@ CXX_SRCS += source/stream_transmitter.cpp
 CXX_SRCS += source/peripheral/msgdma.cpp
 CXX_SRCS += source/data_holder.cpp
 CXX_SRCS += source/shared_memory_manager.cpp
-CXX_SRCS += source/filter/velocity_filter.cpp
 CXX_SRCS += source/filter/acceleration_limitter.cpp
+CXX_SRCS += source/filter/simple_velocity_filter.cpp
 ASM_SRCS :=
 
 

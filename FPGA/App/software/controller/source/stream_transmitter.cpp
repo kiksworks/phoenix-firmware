@@ -50,6 +50,10 @@ void StreamTransmitter::transmitMotion(const MotionData_t &motion_data, const Co
     __builtin_sthio(&StreamDataMotion.body_velocity[0], fpu::to_fp16(motion_data.body_velocity(0)));
     __builtin_sthio(&StreamDataMotion.body_velocity[1], fpu::to_fp16(motion_data.body_velocity(1)));
     __builtin_sthio(&StreamDataMotion.body_velocity[2], fpu::to_fp16(motion_data.body_velocity(2)));
+    __builtin_sthio(&StreamDataMotion.wheel_kf[0], fpu::to_fp16(motion_data.wheel_kf(0)));
+    __builtin_sthio(&StreamDataMotion.wheel_kf[1], fpu::to_fp16(motion_data.wheel_kf(1)));
+    __builtin_sthio(&StreamDataMotion.wheel_kf[2], fpu::to_fp16(motion_data.wheel_kf(2)));
+    __builtin_sthio(&StreamDataMotion.wheel_kf[3], fpu::to_fp16(motion_data.wheel_kf(3)));
     __builtin_sthio(&StreamDataMotion.wheel_velocity_meas[0], fpu::to_fp16(motion_data.wheel_velocity(0)));
     __builtin_sthio(&StreamDataMotion.wheel_velocity_meas[1], fpu::to_fp16(motion_data.wheel_velocity(1)));
     __builtin_sthio(&StreamDataMotion.wheel_velocity_meas[2], fpu::to_fp16(motion_data.wheel_velocity(2)));
@@ -70,6 +74,10 @@ void StreamTransmitter::transmitMotion(const MotionData_t &motion_data, const Co
     __builtin_sthio(&StreamDataMotion.body_ref_accel[1], fpu::to_fp16(control_data.body_ref_accel(1)));
     __builtin_sthio(&StreamDataMotion.body_ref_accel[2], fpu::to_fp16(control_data.body_ref_accel(2)));
     __builtin_sthio(&StreamDataMotion.body_ref_accel[3], fpu::to_fp16(control_data.body_ref_accel(3)));
+    __builtin_sthio(&StreamDataMotion.tmp[0], fpu::to_fp16(motion_data.tmp(0)));
+    __builtin_sthio(&StreamDataMotion.tmp[1], fpu::to_fp16(motion_data.tmp(1)));
+    __builtin_sthio(&StreamDataMotion.tmp[2], fpu::to_fp16(motion_data.tmp(2)));
+    __builtin_sthio(&StreamDataMotion.tmp[3], fpu::to_fp16(motion_data.tmp(3)));
     __builtin_sthio(&StreamDataMotion.performance_counter, static_cast<uint16_t>(performance_counter));
     StreamDataDesciptorMotion.transmitAsync(_device);
 }

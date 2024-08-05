@@ -2,9 +2,9 @@
 <sch:Settings xmlns:sch="http://www.altera.com/embeddedsw/bsp/schema">
         <BspType>hal</BspType>
         <BspVersion>default</BspVersion>
-        <BspGeneratedTimeStamp>2021/10/09 0:08:28</BspGeneratedTimeStamp>
-        <BspGeneratedUnixTimeStamp>1633705708182</BspGeneratedUnixTimeStamp>
-        <BspGeneratedLocation>C:\work\Robocup\phoenix-firmware\FPGA\App\software\controller_bsp</BspGeneratedLocation>
+        <BspGeneratedTimeStamp>Jul 23, 2024 12:16:28 AM</BspGeneratedTimeStamp>
+        <BspGeneratedUnixTimeStamp>1721661388399</BspGeneratedUnixTimeStamp>
+        <BspGeneratedLocation>C:\Users\ryuto\Documents\robocup\phoenix-jetson\phoenix-firmware\FPGA\App\software\controller_bsp</BspGeneratedLocation>
         <BspSettingsFile>settings.bsp</BspSettingsFile>
         <SopcDesignFile>..\..\controller.sopcinfo</SopcDesignFile>
         <JdiFile>default</JdiFile>
@@ -1298,7 +1298,7 @@
                 <SettingName>altera_avalon_jtag_uart_driver.enable_small_driver</SettingName>
                 <Identifier>ALTERA_AVALON_JTAG_UART_SMALL</Identifier>
                 <Type>BooleanDefineOnly</Type>
-                <Value>false</Value>
+                <Value>true</Value>
                 <DefaultValue>false</DefaultValue>
                 <DestinationFile>public_mk_define</DestinationFile>
                 <Description>Small-footprint (polled mode) driver</Description>

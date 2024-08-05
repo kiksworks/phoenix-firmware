@@ -32,10 +32,12 @@ struct StreamDataMotion {
     __fp16 gravity[3];
     __fp16 body_acceleration[3];
     __fp16 body_velocity[3];
+    __fp16 wheel_kf[4];
     __fp16 wheel_velocity_meas[4];
     __fp16 wheel_current_meas_d[4];
     __fp16 wheel_current_meas_q[4];
     __fp16 wheel_current_ref[4];
     __fp16 body_ref_accel[4];
+    __fp16 tmp[4];
     uint16_t performance_counter;
 };

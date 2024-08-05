@@ -90,24 +90,6 @@ static Eigen::Vector4f velocityVectorDecomposition(const Eigen::Vector3f &body_v
     return wheel_velocity;
 }
 
-/**
- * @brief 車体速度ベクトルを車輪速度ベクトルに変換する
- * @param body_velocity 車体速度ベクトル X [m/s], Y [m/s], ω [rad/s], C [m/s]
- * @return 車輪速度ベクトル [m/s]
- */
-static Eigen::Vector4f velocityVectorDecomposition(const Eigen::Vector4f &body_velocity) {
-    Eigen::Vector4f wheel_velocity;
-    float vx = body_velocity(0) * (WHEEL_POS_Y / sqrt(WHEEL_POS_R_2));
-    float vy = body_velocity(1) * (WHEEL_POS_X / sqrt(WHEEL_POS_R_2));
-    float omega = body_velocity(2) * sqrt(WHEEL_POS_R_2);
-    float cancel = body_velocity(3);
-    wheel_velocity(0) = omega - vx + vy + cancel;
-    wheel_velocity(1) = omega + vx + vy - cancel;
-    wheel_velocity(2) = omega + vx - vy + cancel;
-    wheel_velocity(3) = omega - vx - vy - cancel;
-    return wheel_velocity;
-}
-
 void WheelController::startControl(void) {
     initializeRegisters();
     VectorController::clearFault();
@@ -121,12 +103,28 @@ void WheelController::stopControl(void) {
 }
 
 void WheelController::initializeState(void) {
-    _gravity_filter.reset();
-    _velocity_filter.reset();
+    //_gravity_filter.reset();
+    //_velocity_filter.reset();
+    //_imu_velocity_filter.reset();
+//    _imu_lpf[0].reset();
+//    _imu_lpf[1].reset();
+//    _imu_lpf[2].reset();
+//    _current_lpf[0].reset();
+//    _current_lpf[1].reset();
+//    _current_lpf[2].reset();
+//    _current_lpf[3].reset();
+//    _wheel_lpf[0].reset();
+//    _wheel_lpf[1].reset();
+//    _wheel_lpf[2].reset();
+//    _wheel_lpf[3].reset();
+	_simple_velocity_filter.reset();
     _error_hpf[0].reset();
     _error_hpf[1].reset();
     _error_hpf[2].reset();
     _error_hpf[3].reset();
+//    _acc_filted.setZero();
+//    _current_filted.setZero();
+//    _wheel_vel_filted.setZero();
     _ref_body_accel.setZero();
     _ref_wheel_current.setZero();
     _regeneration_energy.setZero();
@@ -161,9 +159,32 @@ void WheelController::update(bool new_parameters, bool sensor_only) {
     speed_ok &= fabsf(parameters.speed_omega) <= MAX_OMEGA_REFERENCE;
 
     // 車体速度を推定する
+    /*
     _gravity_filter.update(motion.accelerometer, motion.gyroscope);
-    _velocity_filter.update(bodyAcceleration(), motion.gyroscope, wheel_velocity, motion.wheel_current_q);
-    if (!isfinite(bodyVelocity()[0]) || !isfinite(bodyVelocity()[1]) || !isfinite(bodyVelocity()[2])) {
+
+    _acc_filted(0) = _imu_lpf[0](motion.accelerometer.x());
+    _acc_filted(1) = _imu_lpf[1](motion.accelerometer.y());
+    _acc_filted(2) = _imu_lpf[2](motion.accelerometer.z());
+    _current_filted(0) = _current_lpf[0](motion.wheel_current_q(0));
+    _current_filted(1) = _current_lpf[1](motion.wheel_current_q(1));
+    _current_filted(2) = _current_lpf[2](motion.wheel_current_q(2));
+    _current_filted(3) = _current_lpf[3](motion.wheel_current_q(3));
+    _wheel_vel_filted(0) = _wheel_lpf[0](wheel_velocity(0));
+    _wheel_vel_filted(1) = _wheel_lpf[1](wheel_velocity(1));
+    _wheel_vel_filted(2) = _wheel_lpf[2](wheel_velocity(2));
+    _wheel_vel_filted(3) = _wheel_lpf[3](wheel_velocity(3));
+    */
+    //_velocity_filter.update(_acc_filted, motion.gyroscope, wheel_velocity, _current_filted);
+    //_imu_velocity_filter.update(_acc_filted, motion.gyroscope);
+    //_velocity_filter.update(motion.accelerometer, motion.gyroscope, _wheel_vel_filted, _current_filted);
+    //_imu_velocity_filter.update(motion.accelerometer, motion.gyroscope);
+    Vector3f vel_wheel;
+    vel_wheel(0) = body_velocity_by_wheels(0);
+    vel_wheel(1) = body_velocity_by_wheels(1);
+    vel_wheel(2) = body_velocity_by_wheels(2);
+    _simple_velocity_filter.update(motion.accelerometer, motion.gyroscope, vel_wheel);
+
+    if (!std::isfinite(bodyVelocity()[0]) || !std::isfinite(bodyVelocity()[1]) || !std::isfinite(bodyVelocity()[2])) {
         CentralizedMonitor::setErrorFlags(ErrorCauseArithmetic);
         return;
     }
@@ -317,9 +338,17 @@ float WheelController::limitPower(float velocity) {
     return fpu::min(current, MAX_CURRENT_LIMIT_PER_MOTOR);
 }
 
-GravityFilter WheelController::_gravity_filter;
-VelocityFilter WheelController::_velocity_filter;
+//GravityFilter WheelController::_gravity_filter;
+//VelocityFilter WheelController::_velocity_filter;
+//ImuVelocityFilter WheelController::_imu_velocity_filter;
+SimpleVelocityFilter WheelController::_simple_velocity_filter;
+//Lpf2ndOrder200 WheelController::_imu_lpf[3];
+//Lpf2ndOrder200 WheelController::_current_lpf[4];
+//Lpf2ndOrder200 WheelController::_wheel_lpf[4];
 Hpf1stOrder5 WheelController::_error_hpf[4];
+//Eigen::Vector3f WheelController::_acc_filted;
+//Eigen::Vector4f WheelController::_current_filted;
+//Eigen::Vector4f WheelController::_wheel_vel_filted;
 Eigen::Vector4f WheelController::_ref_body_accel;
 Eigen::Vector4f WheelController::_ref_wheel_current;
 Eigen::Vector4f WheelController::_regeneration_energy;

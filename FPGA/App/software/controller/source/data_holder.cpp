@@ -39,9 +39,14 @@ extern Eigen::Vector4f global_current_limit;
 extern Eigen::Vector4f global_unlimited_accel;
 
 void DataHolder::fetchOnPostControlLoop(void) {
-    _motion_data.gravity = WheelController::gravityFilter().gravity();
-    _motion_data.body_acceleration = WheelController::gravityFilter().acceleration();
-    _motion_data.body_velocity = WheelController::velocityFilter().bodyVelocity();
+    _motion_data.gravity;//WheelController::gravityFilter().gravity();
+    _motion_data.body_acceleration;//WheelController::gravityFilter().acceleration();
+    _motion_data.body_velocity = WheelController::simpleVelocityFilter().bodyVelocity();
+    _motion_data.wheel_kf;//WheelController::velocityFilter().frictionCoefficients();
+    _motion_data.tmp(0) = 0;//WheelController::imuVelocityFilter().bodyVelocity()(0);
+    _motion_data.tmp(1) = 0;//WheelController::imuVelocityFilter().bodyVelocity()(1);
+    _motion_data.tmp(2) = 0;//WheelController::imuVelocityFilter().bodyVelocity()(2);
+    _motion_data.tmp(3) = 0;//WheelController::currentFilted()(0);
     _control_data.current_ref(0) = VectorController::getCurrentReferenceQ(1) * ADC1_CURRENT_SCALE;
     _control_data.current_ref(1) = VectorController::getCurrentReferenceQ(2) * ADC1_CURRENT_SCALE;
     _control_data.current_ref(2) = VectorController::getCurrentReferenceQ(3) * ADC1_CURRENT_SCALE;
