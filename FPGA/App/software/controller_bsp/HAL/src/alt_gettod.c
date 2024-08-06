@@ -2,7 +2,7 @@
 *                                                                             *
 * License Agreement                                                           *
 *                                                                             *
-* Copyright (c) 2004 Altera Corporation, San Jose, California, USA.           *
+* Copyright (c) 2017,2004 Altera Corporation, San Jose, California, USA.      *
 * All rights reserved.                                                        *
 *                                                                             *
 * Permission is hereby granted, free of charge, to any person obtaining a     *
@@ -76,7 +76,7 @@ int ALT_GETTIMEOFDAY (struct timeval  *ptimeval, struct timezone *ptimezone)
 {
 #endif
   
-  alt_u32 nticks = alt_nticks (); 
+  alt_u64 nticks = alt_nticks (); 
   alt_u32 tick_rate = alt_ticks_per_second ();
 
   /* 
@@ -90,7 +90,7 @@ int ALT_GETTIMEOFDAY (struct timeval  *ptimeval, struct timezone *ptimezone)
   {
     ptimeval->tv_sec  = alt_resettime.tv_sec  + nticks/tick_rate;
     ptimeval->tv_usec = alt_resettime.tv_usec +
-     (alt_u32)(((alt_u64)nticks*(ALT_US/tick_rate))%ALT_US);
+     (alt_u32)((nticks*(ALT_US/tick_rate))%ALT_US);
       
     while(ptimeval->tv_usec < 0) {
       if (ptimeval->tv_sec <= 0)

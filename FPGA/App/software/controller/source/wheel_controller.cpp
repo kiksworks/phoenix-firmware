@@ -16,7 +16,7 @@
 #include <system.h>
 #include <math.h>
 
-#define USE_SIMPLE_CONTROL 0
+#define USE_SIMPLE_CONTROL 1
 
 using namespace Eigen;
 
@@ -87,6 +87,24 @@ static Eigen::Vector4f velocityVectorDecomposition(const Eigen::Vector3f &body_v
     wheel_velocity(1) = omega + vx + vy;
     wheel_velocity(2) = omega + vx - vy;
     wheel_velocity(3) = omega - vx - vy;
+    return wheel_velocity;
+}
+
+/**
+ * @brief 車体速度ベクトルを車輪速度ベクトルに変換する
+ * @param body_velocity 車体速度ベクトル X [m/s], Y [m/s], ω [rad/s], C [m/s]
+ * @return 車輪速度ベクトル [m/s]
+ */
+static Eigen::Vector4f velocityVectorDecomposition(const Eigen::Vector4f &body_velocity) {
+    Eigen::Vector4f wheel_velocity;
+    float vx = body_velocity(0) * (WHEEL_POS_Y / sqrt(WHEEL_POS_R_2));
+    float vy = body_velocity(1) * (WHEEL_POS_X / sqrt(WHEEL_POS_R_2));
+    float omega = body_velocity(2) * sqrt(WHEEL_POS_R_2);
+    float cancel = body_velocity(3);
+    wheel_velocity(0) = omega - vx + vy + cancel;
+    wheel_velocity(1) = omega + vx + vy - cancel;
+    wheel_velocity(2) = omega + vx - vy + cancel;
+    wheel_velocity(3) = omega - vx - vy - cancel;
     return wheel_velocity;
 }
 
@@ -221,6 +239,7 @@ void WheelController::update(bool new_parameters, bool sensor_only) {
 
         // 車体速度制御を行う
         Vector4f ref_body_velocity = {parameters.speed_x, parameters.speed_y, parameters.speed_omega, 0.0f};
+
 #if USE_SIMPLE_CONTROL
         Vector4f ref_wheel_velocity = velocityVectorDecomposition(ref_body_velocity);
         for (int index = 0; index < 4; index++) {

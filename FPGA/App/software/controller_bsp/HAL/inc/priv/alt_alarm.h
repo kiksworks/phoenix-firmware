@@ -5,7 +5,7 @@
 *                                                                             *
 * License Agreement                                                           *
 *                                                                             *
-* Copyright (c) 2004 Altera Corporation, San Jose, California, USA.           *
+* Copyright (c) 2017,2004 Altera Corporation, San Jose, California, USA.      *
 * All rights reserved.                                                        *
 *                                                                             *
 * Permission is hereby granted, free of charge, to any person obtaining a     *
@@ -42,7 +42,7 @@
 #include "alt_types.h"
 
 /*
- * This header provides the internal defenitions required by the public 
+ * This header provides the internal definitions required by the public 
  * interface alt_alarm.h. These variables and structures are not guaranteed to 
  * exist in future implementations of the HAL.
  */
@@ -59,16 +59,14 @@ extern "C"
 
 struct alt_alarm_s
 {
-  alt_llist llist;       /* linked list */
-  alt_u32 time;          /* time in system ticks of the callback */
-  alt_u32 (*callback) (void* context); /* callback function. The return 
-                          * value is the period for the next callback; where 
-                          * zero indicates that the alarm should be removed 
-                          * from the list. 
-                          */
-  alt_u8 rollover;       /* set when desired alarm time + current time causes
-                            overflow, to prevent premature alarm */
-  void* context;         /* Argument for the callback */
+    alt_llist llist;       /* linked list */
+    alt_u64   time;        /* time in system ticks of the callback */
+    alt_u32 (*callback) (void* context); /* callback function. The return 
+                            * value is the period for the next callback; where 
+                            * zero indicates that the alarm should be removed 
+                            * from the list. 
+                            */
+    void* context;         /* Argument for the callback */
 };
 
 /*
@@ -88,7 +86,7 @@ extern alt_u32 _alt_tick_rate;
  * settimeofday() has not been called.
  */
 
-extern volatile alt_u32 _alt_nticks;
+extern volatile alt_u64 _alt_nticks;
 
 /* The list of registered alarms. */
 
