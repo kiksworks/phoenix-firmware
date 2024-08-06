@@ -5,7 +5,7 @@
 *                                                                             *
 * License Agreement                                                           *
 *                                                                             *
-* Copyright (c) 2017,2004 Altera Corporation, San Jose, California, USA.      *
+* Copyright (c) 2004 Altera Corporation, San Jose, California, USA.           *
 * All rights reserved.                                                        *
 *                                                                             *
 * Permission is hereby granted, free of charge, to any person obtaining a     *
@@ -107,7 +107,7 @@ static ALT_INLINE int ALT_ALWAYS_INLINE alt_sysclk_init (alt_u32 nticks)
  * alt_nticks() returns the elapsed number of system clock ticks since reset.
  */
 
-static ALT_INLINE alt_u64 ALT_ALWAYS_INLINE alt_nticks (void)
+static ALT_INLINE alt_u32 ALT_ALWAYS_INLINE alt_nticks (void)
 {
   return _alt_nticks;
 }

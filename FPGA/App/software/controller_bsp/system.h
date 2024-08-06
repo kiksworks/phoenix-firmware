@@ -4,7 +4,7 @@
  * Machine generated for CPU 'nios_0' in SOPC Builder design 'controller'
  * SOPC Builder design path: ../../controller.sopcinfo
  *
- * Generated: Mon Aug 05 03:50:10 JST 2024
+ * Generated: Tue Aug 06 11:29:42 JST 2024
  */
 
 /*
@@ -230,8 +230,6 @@
 #define ALT_STDOUT_PRESENT
 #define ALT_STDOUT_TYPE "altera_avalon_jtag_uart"
 #define ALT_SYSTEM_NAME "controller"
-#define ALT_SYS_CLK_TICKS_PER_SEC NONE_TICKS_PER_SEC
-#define ALT_TIMESTAMP_CLK_TIMER_DEVICE_TYPE NONE_TIMER_DEVICE_TYPE
 
 
 /*

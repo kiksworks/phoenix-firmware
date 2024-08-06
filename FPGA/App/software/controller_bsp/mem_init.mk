@@ -4,7 +4,7 @@
 #########################################################################
 
 #########################################################################
-# This file is intended to be included by the application Makefile
+# This file is intended to be included by public.mk
 #
 #
 # The following variables must be defined before including this file:
@@ -19,7 +19,6 @@
 # - SOPC_NAME
 # - SIM_OPTIMIZE
 # - RESET_ADDRESS
-# - DEFAULT_CROSS_COMPILE
 #
 #########################################################################
 
@@ -33,15 +32,15 @@
 # This will ensure paths are readable by GNU Make.
 #------------------------------------------------------------------------------
 
-UNAME = $(shell uname -r | tr A-Z a-z)
-ifeq ($(findstring microsoft,$(UNAME)),microsoft)
+UNAME = $(shell uname -r)
+ifeq ($(findstring Microsoft,$(UNAME)),Microsoft)
 	WINDOWS_EXE = .exe
 endif
 
 eq = $(and $(findstring $(1),$(2)),$(findstring $(2),$(1)))
 
 ifdef WINDOWS_EXE 
-	adjust-path = $(if $1,$(if $(filter $1,.),.,$(shell wslpath "$1")),)
+	adjust-path = $(if $1,$(shell wslpath "$1"),)
 	adjust-path-mixed = $(if $(call eq,$(shell echo $1 | head -c 5),/mnt/),$(shell echo $1 | sed 's/\/mnt\///g;s/\//:\//1'),$1)
 else # !WINDOWS_EXE
 	adjust-path = $1
@@ -75,9 +74,8 @@ ifeq ($(ALT_FILE_CONVERT),)
 ALT_FILE_CONVERT := alt-file-convert$(WINDOWS_EXE)
 endif
 
-DEFAULT_CROSS_COMPILE ?= nios2-elf-
 ifeq ($(NM),)
-NM := $(DEFAULT_CROSS_COMPILE)nm$(WINDOWS_EXE)
+NM := nios2-elf-nm$(WINDOWS_EXE)
 endif
 
 ifeq ($(MKDIR),)
@@ -185,12 +183,12 @@ flash2dat_extra_args = $(mem_pad_flag) $(mem_reloc_input_flag)
 
 # This following VERSION comment indicates the version of the tool used to 
 # generate this makefile. A makefile variable is provided for VERSION as well. 
-# ACDS_VERSION: 23.1
-ACDS_VERSION := 23.1
+# ACDS_VERSION: 20.1
+ACDS_VERSION := 20.1
 
 # This following BUILD_NUMBER comment indicates the build number of the tool 
 # used to generate this makefile. 
-# BUILD_NUMBER: 993
+# BUILD_NUMBER: 720
 
 # Optimize for simulation
 SIM_OPTIMIZE ?= 0
@@ -198,8 +196,8 @@ SIM_OPTIMIZE ?= 0
 # The CPU reset address as needed by elf2flash
 RESET_ADDRESS ?= 0x00000000
 
-# The specific Nios ELF file format to use.
-NIOS_ELF_FORMAT ?= elf32-littlenios2
+# The specific Nios II ELF file format to use.
+NIOS2_ELF_FORMAT ?= elf32-littlenios2
 
 #-------------------------------------
 # Pre-Initialized Memory Descriptions
@@ -356,7 +354,7 @@ $(foreach i,0 1 2 3 4 5 6 7,%_lane$(i).dat): %.dat
 ELF_TO_HEX_CMD_NO_BOOTLOADER = $(ELF2HEX) $(call adjust-path-mixed,$<) $(mem_start_address) $(mem_end_address) --width=$(mem_hex_width) \
 			$(mem_endianness) --create-lanes=$(mem_create_lanes) $(elf2hex_extra_args) $@
 			
-ELF_TO_HEX_CMD_WITH_BOOTLOADER = $(ALT_FILE_CONVERT) -I $(NIOS_ELF_FORMAT) -O hex --input=$(call adjust-path-mixed,$<) --output=$@ \
+ELF_TO_HEX_CMD_WITH_BOOTLOADER = $(ALT_FILE_CONVERT) -I $(NIOS2_ELF_FORMAT) -O hex --input=$(call adjust-path-mixed,$<) --output=$@ \
 			--base=$(mem_start_address) --end=$(mem_end_address) --reset=$(RESET_ADDRESS) \
 			--out-data-width=$(mem_hex_width) $(flash_mem_boot_loader_flag)
 
