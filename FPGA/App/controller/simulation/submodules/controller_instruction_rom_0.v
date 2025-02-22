@@ -1,4 +1,4 @@
-//Legal Notice: (C)2021 Altera Corporation. All rights reserved.  Your
+//Legal Notice: (C)2025 Altera Corporation. All rights reserved.  Your
 //use of Altera Corporation's design tools, logic functions and other
 //software and tools, and its AMPP partner logic functions, and any
 //output files any of the foregoing (including device programming or
@@ -29,7 +29,6 @@ module controller_instruction_rom_0 (
                                        clk,
                                        clken,
                                        clken2,
-                                       debugaccess,
                                        freeze,
                                        reset,
                                        reset_req,
@@ -58,7 +57,6 @@ module controller_instruction_rom_0 (
   input            clk;
   input            clken;
   input            clken2;
-  input            debugaccess;
   input            freeze;
   input            reset;
   input            reset_req;
@@ -75,11 +73,11 @@ wire    [ 31: 0] readdata;
 wire    [ 31: 0] readdata2;
 wire             wren;
 wire             wren2;
-  assign wren = chipselect & write & debugaccess;
+  assign wren = chipselect & write & clken;
   assign not_clken = ~clken;
   assign not_clken2 = ~clken2;
   assign clocken0 = ~reset_req;
-  assign wren2 = chipselect2 & write2 & debugaccess;
+  assign wren2 = chipselect2 & write2 & clken2;
   altsyncram the_altsyncram
     (
       .address_a (address),

@@ -1,4 +1,4 @@
-//Legal Notice: (C)2021 Altera Corporation. All rights reserved.  Your
+//Legal Notice: (C)2025 Altera Corporation. All rights reserved.  Your
 //use of Altera Corporation's design tools, logic functions and other
 //software and tools, and its AMPP partner logic functions, and any
 //output files any of the foregoing (including device programming or
@@ -44,6 +44,7 @@ module controller_nios_0_cpu_debug_slave_tck (
                                                 trigbrktype,
                                                 trigger_state_1,
                                                 vs_cdr,
+                                                vs_e1dr,
                                                 vs_sdr,
                                                 vs_uir,
 
@@ -52,7 +53,9 @@ module controller_nios_0_cpu_debug_slave_tck (
                                                 jrst_n,
                                                 sr,
                                                 st_ready_test_idle,
-                                                tdo
+                                                tdo,
+                                                vs_e1dr_d1,
+                                                vs_uir_d1
                                              )
 ;
 
@@ -61,6 +64,8 @@ module controller_nios_0_cpu_debug_slave_tck (
   output  [ 37: 0] sr;
   output           st_ready_test_idle;
   output           tdo;
+  output           vs_e1dr_d1;
+  output           vs_uir_d1;
   input   [ 31: 0] MonDReg;
   input   [ 31: 0] break_readreg;
   input            dbrk_hit0_latch;
@@ -85,20 +90,23 @@ module controller_nios_0_cpu_debug_slave_tck (
   input            trigbrktype;
   input            trigger_state_1;
   input            vs_cdr;
+  input            vs_e1dr;
   input            vs_sdr;
   input            vs_uir;
 
 
-reg     [  2: 0] DRsize /* synthesis ALTERA_ATTRIBUTE = "SUPPRESS_DA_RULE_INTERNAL=\"D101,D103,R101\""  */;
+reg     [  2: 0] DRsize /* synthesis ALTERA_ATTRIBUTE = "SUPPRESS_DA_RULE_INTERNAL=\"D101,D103,R101\"" preserve dont_replicate dont_retime ""  */;
 wire             debugack_sync;
-reg     [  1: 0] ir_out;
+reg     [  1: 0] ir_out /* synthesis ALTERA_ATTRIBUTE = "SUPPRESS_DA_RULE_INTERNAL=\"D101,D103,R101\"" preserve dont_replicate dont_retime ""  */;
 wire             jrst_n;
 wire             monitor_ready_sync;
-reg     [ 37: 0] sr /* synthesis ALTERA_ATTRIBUTE = "SUPPRESS_DA_RULE_INTERNAL=\"D101,D103,R101\""  */;
+reg     [ 37: 0] sr /* synthesis ALTERA_ATTRIBUTE = "SUPPRESS_DA_RULE_INTERNAL=\"D101,D103,R101\"" preserve dont_replicate dont_retime ""  */;
 wire             st_ready_test_idle;
 wire             tdo;
-wire             unxcomplemented_resetxx1;
 wire             unxcomplemented_resetxx2;
+wire             unxcomplemented_resetxx3;
+reg              vs_e1dr_d1 /* synthesis ALTERA_ATTRIBUTE = "SUPPRESS_DA_RULE_INTERNAL=\"D101,D103,R101\"" preserve dont_replicate dont_retime ""  */;
+reg              vs_uir_d1 /* synthesis ALTERA_ATTRIBUTE = "SUPPRESS_DA_RULE_INTERNAL=\"D101,D103,R101\"" preserve dont_replicate dont_retime ""  */;
   always @(posedge tck)
     begin
       if (vs_cdr)
@@ -192,34 +200,42 @@ wire             unxcomplemented_resetxx2;
 
   assign tdo = sr[0];
   assign st_ready_test_idle = jtag_state_rti;
-  assign unxcomplemented_resetxx1 = jrst_n;
-  altera_std_synchronizer the_altera_std_synchronizer1
-    (
-      .clk (tck),
-      .din (debugack),
-      .dout (debugack_sync),
-      .reset_n (unxcomplemented_resetxx1)
-    );
-
-  defparam the_altera_std_synchronizer1.depth = 2;
-
   assign unxcomplemented_resetxx2 = jrst_n;
   altera_std_synchronizer the_altera_std_synchronizer2
     (
       .clk (tck),
-      .din (monitor_ready),
-      .dout (monitor_ready_sync),
+      .din (debugack),
+      .dout (debugack_sync),
       .reset_n (unxcomplemented_resetxx2)
     );
 
   defparam the_altera_std_synchronizer2.depth = 2;
 
+  assign unxcomplemented_resetxx3 = jrst_n;
+  altera_std_synchronizer the_altera_std_synchronizer3
+    (
+      .clk (tck),
+      .din (monitor_ready),
+      .dout (monitor_ready_sync),
+      .reset_n (unxcomplemented_resetxx3)
+    );
+
+  defparam the_altera_std_synchronizer3.depth = 2;
+
   always @(posedge tck or negedge jrst_n)
     begin
       if (jrst_n == 0)
+        begin
           ir_out <= 2'b0;
+          vs_uir_d1 <= 1'b0;
+          vs_e1dr_d1 <= 1'b0;
+        end
       else 
-        ir_out <= {debugack_sync, monitor_ready_sync};
+        begin
+          ir_out <= {debugack_sync, monitor_ready_sync};
+          vs_uir_d1 <= vs_uir;
+          vs_e1dr_d1 <= vs_e1dr;
+        end
     end
 
 

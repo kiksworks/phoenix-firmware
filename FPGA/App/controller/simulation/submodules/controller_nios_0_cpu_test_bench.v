@@ -1,4 +1,4 @@
-//Legal Notice: (C)2021 Altera Corporation. All rights reserved.  Your
+//Legal Notice: (C)2025 Altera Corporation. All rights reserved.  Your
 //use of Altera Corporation's design tools, logic functions and other
 //software and tools, and its AMPP partner logic functions, and any
 //output files any of the foregoing (including device programming or
@@ -60,6 +60,9 @@ module controller_nios_0_cpu_test_bench (
                                            d_byteenable,
                                            d_read,
                                            d_write,
+                                           dtcm0_address,
+                                           dtcm0_byteenable,
+                                           dtcm0_write,
                                            eic_port_data,
                                            eic_port_data_rha,
                                            eic_port_data_ril,
@@ -128,6 +131,9 @@ module controller_nios_0_cpu_test_bench (
   input   [  3: 0] d_byteenable;
   input            d_read;
   input            d_write;
+  input   [ 15: 0] dtcm0_address;
+  input   [  3: 0] dtcm0_byteenable;
+  input            dtcm0_write;
   input   [ 44: 0] eic_port_data;
   input   [ 31: 0] eic_port_data_rha;
   input   [  5: 0] eic_port_data_ril;
@@ -215,6 +221,7 @@ wire             W_op_custom;
 wire             W_op_div;
 wire             W_op_divu;
 wire             W_op_eret;
+wire             W_op_float32to16_0;
 wire             W_op_flushd;
 wire             W_op_flushda;
 wire             W_op_flushi;
@@ -451,6 +458,7 @@ wire             test_has_ended;
   assign W_op_intr = (W_iw_opx == 61) & W_is_opx_inst;
   assign W_op_crst = (W_iw_opx == 62) & W_is_opx_inst;
   assign W_op_opx_rsv63 = (W_iw_opx == 63) & W_is_opx_inst;
+  assign W_op_float32to16_0 = W_op_custom & ({W_iw_custom_n[7 : 0]} == 8'h0);
   assign W_op_nios_custom_instr_floating_point_2_0 = W_op_custom & ({W_iw_custom_n[7 : 4] , 4'b0} == 8'he0);
   assign W_op_nios_custom_instr_floating_point_2_0_1 = W_op_custom & ({W_iw_custom_n[7 : 3] , 3'b0} == 8'hf8);
   assign W_is_opx_inst = W_iw_op == 58;
@@ -1000,6 +1008,45 @@ wire             test_has_ended;
           if (^(d_read) === 1'bx)
             begin
               $write("%0d ns: ERROR: controller_nios_0_cpu_test_bench/d_read is 'x'\n", $time);
+              $stop;
+            end
+    end
+
+
+  always @(posedge clk)
+    begin
+      if (reset_n)
+          if (^(dtcm0_write) === 1'bx)
+            begin
+              $write("%0d ns: ERROR: controller_nios_0_cpu_test_bench/dtcm0_write is 'x'\n", $time);
+              $stop;
+            end
+    end
+
+
+  always @(posedge clk or negedge reset_n)
+    begin
+      if (reset_n == 0)
+        begin
+        end
+      else if (dtcm0_write)
+          if (^(dtcm0_address) === 1'bx)
+            begin
+              $write("%0d ns: ERROR: controller_nios_0_cpu_test_bench/dtcm0_address is 'x'\n", $time);
+              $stop;
+            end
+    end
+
+
+  always @(posedge clk or negedge reset_n)
+    begin
+      if (reset_n == 0)
+        begin
+        end
+      else if (dtcm0_write)
+          if (^(dtcm0_byteenable) === 1'bx)
+            begin
+              $write("%0d ns: ERROR: controller_nios_0_cpu_test_bench/dtcm0_byteenable is 'x'\n", $time);
               $stop;
             end
     end

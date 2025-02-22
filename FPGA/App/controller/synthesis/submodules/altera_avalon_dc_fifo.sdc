@@ -1,6 +1,6 @@
-# $File: //acds/rel/20.1std/ip/sopc/components/altera_avalon_dc_fifo/altera_avalon_dc_fifo.sdc $
+# $File: //acds/rel/23.1std/ip/sopc/components/altera_avalon_dc_fifo/altera_avalon_dc_fifo.sdc $
 # $Revision: #1 $
-# $Date: 2019/10/06 $
+# $Date: 2022/10/30 $
 # $Author: psgswbuild $
 
 #-------------------------------------------------------------------------------
