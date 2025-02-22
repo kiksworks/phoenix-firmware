@@ -10,13 +10,17 @@
 *.log
 *.sopcinfo
 *.qws
+*.rpt
 *.pdf
+*.qsf
+*.sdc
+*.srf
 
 /controller
 
 /software/.metadata
-/software/RemoteSystemsTempFiles/
-software/controller_bsp/
+/software/RemoteSystemsTempFiles
+software/controller_bsp
 software/controller/*
 !/software/controller/source/
 !/software/controller/Makefile
