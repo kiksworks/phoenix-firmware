@@ -2,11 +2,12 @@
 <sch:Settings xmlns:sch="http://www.altera.com/embeddedsw/bsp/schema">
         <BspType>hal</BspType>
         <BspVersion>default</BspVersion>
-        <BspGeneratedTimeStamp>2021/10/09 0:08:28</BspGeneratedTimeStamp>
-        <BspGeneratedUnixTimeStamp>1633705708182</BspGeneratedUnixTimeStamp>
-        <BspGeneratedLocation>C:\work\Robocup\phoenix-firmware\FPGA\App\software\controller_bsp</BspGeneratedLocation>
+        <BspGeneratedTimeStamp>2025/02/22 18:29:26</BspGeneratedTimeStamp>
+        <BspGeneratedUnixTimeStamp>1740216566736</BspGeneratedUnixTimeStamp>
+        <BspGeneratedLocation>C:\Users\KIKS\Documents\phoenix-firmware\FPGA\App\software\controller_bsp</BspGeneratedLocation>
         <BspSettingsFile>settings.bsp</BspSettingsFile>
         <SopcDesignFile>..\..\controller.sopcinfo</SopcDesignFile>
+        <SystemFileHash>ea71ebe9577e5f8c4a58050a034db1f248929917153c2fac08a95906fd89d86</SystemFileHash>
         <JdiFile>default</JdiFile>
         <Cpu>nios_0</Cpu>
         <SchemaVersion>1.9</SchemaVersion>
@@ -1429,29 +1430,36 @@
         <LinkerSection>
                 <sectionName>.text</sectionName>
                 <regionName>instruction_rom_0</regionName>
+                <noLoad>false</noLoad>
         </LinkerSection>
         <LinkerSection>
                 <sectionName>.rodata</sectionName>
                 <regionName>instruction_rom_0</regionName>
+                <noLoad>false</noLoad>
         </LinkerSection>
         <LinkerSection>
                 <sectionName>.rwdata</sectionName>
                 <regionName>data_ram_0</regionName>
+                <noLoad>false</noLoad>
         </LinkerSection>
         <LinkerSection>
                 <sectionName>.bss</sectionName>
                 <regionName>data_ram_0</regionName>
+                <noLoad>false</noLoad>
         </LinkerSection>
         <LinkerSection>
                 <sectionName>.heap</sectionName>
                 <regionName>data_ram_0</regionName>
+                <noLoad>false</noLoad>
         </LinkerSection>
         <LinkerSection>
                 <sectionName>.stack</sectionName>
                 <regionName>data_ram_0</regionName>
+                <noLoad>false</noLoad>
         </LinkerSection>
         <LinkerSection>
                 <sectionName>.shared</sectionName>
                 <regionName>data_ram_1</regionName>
+                <noLoad>false</noLoad>
         </LinkerSection>
 </sch:Settings>

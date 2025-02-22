@@ -4,7 +4,7 @@
  * Machine generated for CPU 'nios_0' in SOPC Builder design 'controller'
  * SOPC Builder design path: ../../controller.sopcinfo
  *
- * Generated: Sat Oct 09 00:08:28 JST 2021
+ * Generated: Sat Feb 22 18:29:27 JST 2025
  */
 
 /*
@@ -230,6 +230,8 @@
 #define ALT_STDOUT_PRESENT
 #define ALT_STDOUT_TYPE "altera_avalon_jtag_uart"
 #define ALT_SYSTEM_NAME "controller"
+#define ALT_SYS_CLK_TICKS_PER_SEC NONE_TICKS_PER_SEC
+#define ALT_TIMESTAMP_CLK_TIMER_DEVICE_TYPE NONE_TIMER_DEVICE_TYPE
 
 
 /*
@@ -717,7 +719,7 @@
 #define SYSID_QSYS_0_IRQ_INTERRUPT_CONTROLLER_ID -1
 #define SYSID_QSYS_0_NAME "/dev/sysid_qsys_0"
 #define SYSID_QSYS_0_SPAN 8
-#define SYSID_QSYS_0_TIMESTAMP 1633705653
+#define SYSID_QSYS_0_TIMESTAMP 1740211579
 #define SYSID_QSYS_0_TYPE "altera_avalon_sysid_qsys"
 
 
@@ -744,6 +746,7 @@
 #define TIMER_0_SPAN 32
 #define TIMER_0_TICKS_PER_SEC 500
 #define TIMER_0_TIMEOUT_PULSE_OUTPUT 0
+#define TIMER_0_TIMER_DEVICE_TYPE 1
 #define TIMER_0_TYPE "altera_avalon_timer"
 
 
