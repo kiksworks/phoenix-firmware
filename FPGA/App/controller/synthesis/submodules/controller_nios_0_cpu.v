@@ -1,4 +1,4 @@
-//Legal Notice: (C)2021 Altera Corporation. All rights reserved.  Your
+//Legal Notice: (C)2025 Altera Corporation. All rights reserved.  Your
 //use of Altera Corporation's design tools, logic functions and other
 //software and tools, and its AMPP partner logic functions, and any
 //output files any of the foregoing (including device programming or
@@ -202,17 +202,19 @@ module controller_nios_0_cpu_nios2_oci_debug (
 
 
 wire             E_oci_sync_hbreak_req;
-reg              break_on_reset /* synthesis ALTERA_ATTRIBUTE = "SUPPRESS_DA_RULE_INTERNAL=\"D101,R101\""  */;
+reg              break_on_reset /* synthesis ALTERA_ATTRIBUTE = "SUPPRESS_DA_RULE_INTERNAL=\"D101,R101\"" preserve dont_replicate dont_retime ""  */;
 wire             debugack;
-reg              jtag_break /* synthesis ALTERA_ATTRIBUTE = "SUPPRESS_DA_RULE_INTERNAL=\"D101,R101\""  */;
-reg              monitor_error /* synthesis ALTERA_ATTRIBUTE = "SUPPRESS_DA_RULE_INTERNAL=D101"  */;
-reg              monitor_go /* synthesis ALTERA_ATTRIBUTE = "SUPPRESS_DA_RULE_INTERNAL=D101"  */;
-reg              monitor_ready /* synthesis ALTERA_ATTRIBUTE = "SUPPRESS_DA_RULE_INTERNAL=D101"  */;
+reg              jtag_break /* synthesis ALTERA_ATTRIBUTE = "SUPPRESS_DA_RULE_INTERNAL=\"D101,R101\"" preserve dont_replicate dont_retime ""  */;
+reg              monitor_error /* synthesis ALTERA_ATTRIBUTE = "SUPPRESS_DA_RULE_INTERNAL=\"D101\"" preserve dont_replicate dont_retime ""  */;
+reg              monitor_go /* synthesis ALTERA_ATTRIBUTE = "SUPPRESS_DA_RULE_INTERNAL=\"D101\"" preserve dont_replicate dont_retime ""  */;
+reg              monitor_ready /* synthesis ALTERA_ATTRIBUTE = "SUPPRESS_DA_RULE_INTERNAL=\"D101\"" preserve dont_replicate dont_retime ""  */;
 wire             oci_async_hbreak_req;
 wire             reset_sync;
-reg              resetlatch /* synthesis ALTERA_ATTRIBUTE = "SUPPRESS_DA_RULE_INTERNAL=\"D101,R101\""  */;
-reg              resetrequest /* synthesis ALTERA_ATTRIBUTE = "SUPPRESS_DA_RULE_INTERNAL=\"D101,R101\""  */;
+reg              resetlatch /* synthesis ALTERA_ATTRIBUTE = "SUPPRESS_DA_RULE_INTERNAL=\"D101,R101\"" preserve dont_replicate dont_retime ""  */;
+reg              resetrequest /* synthesis ALTERA_ATTRIBUTE = "SUPPRESS_DA_RULE_INTERNAL=\"D101,R101\"" preserve dont_replicate dont_retime ""  */;
+wire             st_ready_test_idle_sync;
 wire             unxcomplemented_resetxx0;
+wire             unxcomplemented_resetxx1;
   assign unxcomplemented_resetxx0 = jrst_n;
   altera_std_synchronizer the_altera_std_synchronizer
     (
@@ -223,6 +225,17 @@ wire             unxcomplemented_resetxx0;
     );
 
   defparam the_altera_std_synchronizer.depth = 2;
+
+  assign unxcomplemented_resetxx1 = jrst_n;
+  altera_std_synchronizer the_altera_std_synchronizer1
+    (
+      .clk (clk),
+      .din (st_ready_test_idle),
+      .dout (st_ready_test_idle_sync),
+      .reset_n (unxcomplemented_resetxx1)
+    );
+
+  defparam the_altera_std_synchronizer1.depth = 2;
 
   always @(posedge clk or negedge jrst_n)
     begin
@@ -275,7 +288,7 @@ wire             unxcomplemented_resetxx0;
               monitor_error <= 1'b1;
           if (take_action_ocimem_a && jdo[23])
               monitor_go <= 1'b1;
-          else if (st_ready_test_idle)
+          else if (st_ready_test_idle_sync)
               monitor_go <= 1'b0;
         end
     end
@@ -362,7 +375,7 @@ wire    [  1: 0] break_a_wpr_high_bits;
 wire    [  1: 0] break_a_wpr_low_bits;
 wire    [  1: 0] break_b_rr;
 wire    [  1: 0] break_c_rr;
-reg     [ 31: 0] break_readreg /* synthesis ALTERA_ATTRIBUTE = "SUPPRESS_DA_RULE_INTERNAL=\"D101,R101\""  */;
+reg     [ 31: 0] break_readreg /* synthesis ALTERA_ATTRIBUTE = "SUPPRESS_DA_RULE_INTERNAL=\"D101,R101\"" preserve dont_replicate dont_retime ""  */;
 wire             dbrk0_high_value;
 wire             dbrk0_low_value;
 wire             dbrk1_high_value;
@@ -376,18 +389,18 @@ wire             dbrk_hit1_latch;
 wire             dbrk_hit2_latch;
 wire             dbrk_hit3_latch;
 wire             take_action_any_break;
-reg              trigbrktype /* synthesis ALTERA_ATTRIBUTE = "SUPPRESS_DA_RULE_INTERNAL=\"D101,R101\""  */;
-reg              trigger_state;
+reg              trigbrktype /* synthesis ALTERA_ATTRIBUTE = "SUPPRESS_DA_RULE_INTERNAL=\"D101,R101\"" preserve dont_replicate dont_retime ""  */;
+reg              trigger_state /* synthesis ALTERA_ATTRIBUTE = "SUPPRESS_DA_RULE_INTERNAL=\"D101,R101\"" preserve dont_replicate dont_retime ""  */;
 wire             trigger_state_0;
 wire             trigger_state_1;
 wire    [ 31: 0] xbrk0_value;
 wire    [ 31: 0] xbrk1_value;
 wire    [ 31: 0] xbrk2_value;
 wire    [ 31: 0] xbrk3_value;
-reg     [  7: 0] xbrk_ctrl0 /* synthesis ALTERA_ATTRIBUTE = "SUPPRESS_DA_RULE_INTERNAL=\"D101,R101\""  */;
-reg     [  7: 0] xbrk_ctrl1 /* synthesis ALTERA_ATTRIBUTE = "SUPPRESS_DA_RULE_INTERNAL=\"D101,R101\""  */;
-reg     [  7: 0] xbrk_ctrl2 /* synthesis ALTERA_ATTRIBUTE = "SUPPRESS_DA_RULE_INTERNAL=\"D101,R101\""  */;
-reg     [  7: 0] xbrk_ctrl3 /* synthesis ALTERA_ATTRIBUTE = "SUPPRESS_DA_RULE_INTERNAL=\"D101,R101\""  */;
+reg     [  7: 0] xbrk_ctrl0 /* synthesis ALTERA_ATTRIBUTE = "SUPPRESS_DA_RULE_INTERNAL=\"D101,R101\"" preserve dont_replicate dont_retime ""  */;
+reg     [  7: 0] xbrk_ctrl1 /* synthesis ALTERA_ATTRIBUTE = "SUPPRESS_DA_RULE_INTERNAL=\"D101,R101\"" preserve dont_replicate dont_retime ""  */;
+reg     [  7: 0] xbrk_ctrl2 /* synthesis ALTERA_ATTRIBUTE = "SUPPRESS_DA_RULE_INTERNAL=\"D101,R101\"" preserve dont_replicate dont_retime ""  */;
+reg     [  7: 0] xbrk_ctrl3 /* synthesis ALTERA_ATTRIBUTE = "SUPPRESS_DA_RULE_INTERNAL=\"D101,R101\"" preserve dont_replicate dont_retime ""  */;
   assign break_a_wpr = jdo[35 : 32];
   assign break_a_wpr_high_bits = break_a_wpr[3 : 2];
   assign break_a_wpr_low_bits = break_a_wpr[1 : 0];
@@ -1147,7 +1160,7 @@ wire    [  6: 0] sync_timer_next;
 wire             sync_timer_reached_zero;
 wire    [ 15: 0] trc_ctrl;
 reg     [ 10: 0] trc_ctrl_reg /* synthesis ALTERA_ATTRIBUTE = "SUPPRESS_DA_RULE_INTERNAL=\"D101,D103,R101\""  */;
-wire             trc_on;
+reg              trc_on /* synthesis ALTERA_ATTRIBUTE = "SUPPRESS_DA_RULE_INTERNAL=\"R101\"" preserve dont_replicate dont_retime ""  */;
   assign is_cond_dct = A_op_bge  | A_op_blt | A_op_bne | A_op_bgeu | 
     A_op_bltu | A_op_beq;
 
@@ -1213,7 +1226,15 @@ wire             trc_on;
 
 
   assign trc_ctrl = 0;
-  assign trc_on = trc_ctrl[1] & (trc_ctrl[9] | not_in_debug_mode);
+  always @(posedge clk or negedge jrst_n)
+    begin
+      if (jrst_n == 0)
+          trc_on <= 0;
+      else 
+        trc_on <= trc_ctrl[1] & (trc_ctrl[9] | not_in_debug_mode);
+    end
+
+
 
 endmodule
 
@@ -2079,10 +2100,10 @@ module controller_nios_0_cpu_nios2_oci_im (
 wire             tracemem_on;
 wire    [ 35: 0] tracemem_trcdata;
 wire             tracemem_tw;
-reg     [  6: 0] trc_im_addr /* synthesis ALTERA_ATTRIBUTE = "SUPPRESS_DA_RULE_INTERNAL=\"D101,D103,R101\""  */;
+reg     [  6: 0] trc_im_addr /* synthesis ALTERA_ATTRIBUTE = "SUPPRESS_DA_RULE_INTERNAL=\"D101,D103,R101\"" preserve dont_replicate dont_retime ""  */;
 wire    [ 35: 0] trc_im_data;
 wire             trc_on_chip;
-reg              trc_wrap /* synthesis ALTERA_ATTRIBUTE = "SUPPRESS_DA_RULE_INTERNAL=\"D101,D103,R101\""  */;
+reg              trc_wrap /* synthesis ALTERA_ATTRIBUTE = "SUPPRESS_DA_RULE_INTERNAL=\"D101,D103,R101\"" preserve dont_replicate dont_retime ""  */;
 wire             tw_valid;
 wire             xbrk_wrap_traceoff;
   assign trc_im_data = tw;
@@ -2333,26 +2354,26 @@ module controller_nios_0_cpu_nios2_ocimem (
   input   [ 31: 0] writedata;
 
 
-reg     [ 10: 0] MonAReg /* synthesis ALTERA_ATTRIBUTE = "SUPPRESS_DA_RULE_INTERNAL=\"D101,D103,R101\""  */;
+reg     [ 10: 0] MonAReg /* synthesis ALTERA_ATTRIBUTE = "SUPPRESS_DA_RULE_INTERNAL=\"D101,D103,R101\"" preserve dont_replicate dont_retime ""  */;
 wire    [  8: 0] MonARegAddrInc;
 wire             MonARegAddrIncAccessingRAM;
-reg     [ 31: 0] MonDReg /* synthesis ALTERA_ATTRIBUTE = "SUPPRESS_DA_RULE_INTERNAL=\"D101,D103,R101\""  */;
-reg              avalon_ociram_readdata_ready /* synthesis ALTERA_ATTRIBUTE = "SUPPRESS_DA_RULE_INTERNAL=\"D101,D103,R101\""  */;
+reg     [ 31: 0] MonDReg /* synthesis ALTERA_ATTRIBUTE = "SUPPRESS_DA_RULE_INTERNAL=\"D101,D103,R101\"" preserve dont_replicate dont_retime ""  */;
+reg              avalon_ociram_readdata_ready /* synthesis ALTERA_ATTRIBUTE = "SUPPRESS_DA_RULE_INTERNAL=\"D101,D103,R101\"" preserve dont_replicate dont_retime ""  */;
 wire             avalon_ram_wr;
 wire    [ 31: 0] cfgrom_readdata;
-reg              jtag_ram_access /* synthesis ALTERA_ATTRIBUTE = "SUPPRESS_DA_RULE_INTERNAL=\"D101,D103,R101\""  */;
-reg              jtag_ram_rd /* synthesis ALTERA_ATTRIBUTE = "SUPPRESS_DA_RULE_INTERNAL=\"D101,D103,R101\""  */;
-reg              jtag_ram_rd_d1 /* synthesis ALTERA_ATTRIBUTE = "SUPPRESS_DA_RULE_INTERNAL=\"D101,D103,R101\""  */;
-reg              jtag_ram_wr /* synthesis ALTERA_ATTRIBUTE = "SUPPRESS_DA_RULE_INTERNAL=\"D101,D103,R101\""  */;
-reg              jtag_rd /* synthesis ALTERA_ATTRIBUTE = "SUPPRESS_DA_RULE_INTERNAL=\"D101,D103,R101\""  */;
-reg              jtag_rd_d1 /* synthesis ALTERA_ATTRIBUTE = "SUPPRESS_DA_RULE_INTERNAL=\"D101,D103,R101\""  */;
+reg              jtag_ram_access /* synthesis ALTERA_ATTRIBUTE = "SUPPRESS_DA_RULE_INTERNAL=\"D101,D103,R101\"" preserve dont_replicate dont_retime ""  */;
+reg              jtag_ram_rd /* synthesis ALTERA_ATTRIBUTE = "SUPPRESS_DA_RULE_INTERNAL=\"D101,D103,R101\"" preserve dont_replicate dont_retime ""  */;
+reg              jtag_ram_rd_d1 /* synthesis ALTERA_ATTRIBUTE = "SUPPRESS_DA_RULE_INTERNAL=\"D101,D103,R101\"" preserve dont_replicate dont_retime ""  */;
+reg              jtag_ram_wr /* synthesis ALTERA_ATTRIBUTE = "SUPPRESS_DA_RULE_INTERNAL=\"D101,D103,R101\"" preserve dont_replicate dont_retime ""  */;
+reg              jtag_rd /* synthesis ALTERA_ATTRIBUTE = "SUPPRESS_DA_RULE_INTERNAL=\"D101,D103,R101\"" preserve dont_replicate dont_retime ""  */;
+reg              jtag_rd_d1 /* synthesis ALTERA_ATTRIBUTE = "SUPPRESS_DA_RULE_INTERNAL=\"D101,D103,R101\"" preserve dont_replicate dont_retime ""  */;
 wire    [  7: 0] ociram_addr;
 wire    [  3: 0] ociram_byteenable;
 wire    [ 31: 0] ociram_readdata;
 wire             ociram_reset_req;
 wire    [ 31: 0] ociram_wr_data;
 wire             ociram_wr_en;
-reg              waitrequest /* synthesis ALTERA_ATTRIBUTE = "SUPPRESS_DA_RULE_INTERNAL=\"D101,D103,R101\""  */;
+reg              waitrequest /* synthesis ALTERA_ATTRIBUTE = "SUPPRESS_DA_RULE_INTERNAL=\"D101,D103,R101\"" preserve dont_replicate dont_retime ""  */;
   always @(posedge clk or negedge jrst_n)
     begin
       if (jrst_n == 0)

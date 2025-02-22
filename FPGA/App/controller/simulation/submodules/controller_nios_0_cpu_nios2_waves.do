@@ -3,6 +3,17 @@ add wave -noupdate -format Logic -radix hexadecimal /NIOS2_INSTANCE_TOP/i_readda
 add wave -noupdate -format Logic -radix hexadecimal /NIOS2_INSTANCE_TOP/i_waitrequest
 add wave -noupdate -format Logic -radix hexadecimal /NIOS2_INSTANCE_TOP/i_address
 add wave -noupdate -format Logic -radix hexadecimal /NIOS2_INSTANCE_TOP/i_read
+add wave -noupdate -format Logic -radix hexadecimal /NIOS2_INSTANCE_TOP/itcm0_readdata
+add wave -noupdate -format Logic -radix hexadecimal /NIOS2_INSTANCE_TOP/itcm0_address
+add wave -noupdate -format Logic -radix hexadecimal /NIOS2_INSTANCE_TOP/itcm0_read
+add wave -noupdate -format Logic -radix hexadecimal /NIOS2_INSTANCE_TOP/itcm0_clken
+add wave -noupdate -format Logic -radix hexadecimal /NIOS2_INSTANCE_TOP/dtcm0_readdata
+add wave -noupdate -format Logic -radix hexadecimal /NIOS2_INSTANCE_TOP/dtcm0_address
+add wave -noupdate -format Logic -radix hexadecimal /NIOS2_INSTANCE_TOP/dtcm0_read
+add wave -noupdate -format Logic -radix hexadecimal /NIOS2_INSTANCE_TOP/dtcm0_write
+add wave -noupdate -format Logic -radix hexadecimal /NIOS2_INSTANCE_TOP/dtcm0_clken
+add wave -noupdate -format Logic -radix hexadecimal /NIOS2_INSTANCE_TOP/dtcm0_writedata
+add wave -noupdate -format Logic -radix hexadecimal /NIOS2_INSTANCE_TOP/dtcm0_byteenable
 add wave -noupdate -format Logic -radix hexadecimal /NIOS2_INSTANCE_TOP/clk
 add wave -noupdate -format Logic -radix hexadecimal /NIOS2_INSTANCE_TOP/reset_n
 add wave -noupdate -format Logic -radix hexadecimal /NIOS2_INSTANCE_TOP/d_readdata
@@ -147,6 +158,9 @@ add wave -noupdate -format Logic -radix hexadecimal /NIOS2_INSTANCE_TOP/F_i_want
 add wave -noupdate -format Logic -radix hexadecimal /NIOS2_INSTANCE_TOP/F_i_read_starting
 add wave -noupdate -format Logic -radix hexadecimal /NIOS2_INSTANCE_TOP/F_i_consumed
 add wave -noupdate -format Logic -radix hexadecimal /NIOS2_INSTANCE_TOP/i_readdata_d1_valid
+add wave -noupdate -divider {controller_nios_0_cpu: instruction_master_sel}
+add wave -noupdate -format Logic -radix hexadecimal /NIOS2_INSTANCE_TOP/F_sel_instruction_master
+add wave -noupdate -format Logic -radix hexadecimal /NIOS2_INSTANCE_TOP/F_sel_tightly_coupled_instruction_master_0
 add wave -noupdate -divider {controller_nios_0_cpu: static_brpred_(frontend)}
 add wave -noupdate -format Logic -radix hexadecimal /NIOS2_INSTANCE_TOP/D_iw
 add wave -noupdate -format Logic -radix ascii /NIOS2_INSTANCE_TOP/D_vinst
@@ -161,6 +175,9 @@ add wave -noupdate -format Logic -radix hexadecimal /NIOS2_INSTANCE_TOP/E_br_con
 add wave -noupdate -format Logic -radix hexadecimal /NIOS2_INSTANCE_TOP/E_br_actually_taken
 add wave -noupdate -format Logic -radix hexadecimal /NIOS2_INSTANCE_TOP/E_br_mispredict
 add wave -noupdate -format Logic -radix hexadecimal /NIOS2_INSTANCE_TOP/M_br_mispredict
+add wave -noupdate -divider {controller_nios_0_cpu: data_master_sel}
+add wave -noupdate -format Logic -radix hexadecimal /NIOS2_INSTANCE_TOP/E_sel_tightly_coupled_data_master_0
+add wave -noupdate -format Logic -radix hexadecimal /NIOS2_INSTANCE_TOP/E_sel_data_master
 add wave -noupdate -divider {controller_nios_0_cpu: A_slow_inst_result_mux}
 add wave -noupdate -format Logic -radix hexadecimal /NIOS2_INSTANCE_TOP/A_exc_wr_sstatus
 add wave -noupdate -format Logic -radix hexadecimal /NIOS2_INSTANCE_TOP/W_sstatus_reg_nxt
@@ -216,6 +233,7 @@ add wave -noupdate -format Logic -radix hexadecimal /NIOS2_INSTANCE_TOP/M_ctrl_l
 add wave -noupdate -format Logic -radix hexadecimal /NIOS2_INSTANCE_TOP/M_ctrl_ld8
 add wave -noupdate -format Logic -radix hexadecimal /NIOS2_INSTANCE_TOP/M_ctrl_ld16
 add wave -noupdate -format Logic -radix hexadecimal /NIOS2_INSTANCE_TOP/M_ctrl_ld_signed
+add wave -noupdate -format Logic -radix hexadecimal /NIOS2_INSTANCE_TOP/M_ram_rd_data
 add wave -noupdate -format Logic -radix hexadecimal /NIOS2_INSTANCE_TOP/M_inst_result
 add wave -noupdate -format Logic -radix hexadecimal /NIOS2_INSTANCE_TOP/A_inst_result
 add wave -noupdate -format Logic -radix hexadecimal /NIOS2_INSTANCE_TOP/A_inst_result_aligned
@@ -372,6 +390,12 @@ add wave -noupdate -format Logic -radix hexadecimal /NIOS2_INSTANCE_TOP/A_div_qu
 add wave -noupdate -format Logic -radix hexadecimal /NIOS2_INSTANCE_TOP/div_active
 add wave -noupdate -format Logic -radix hexadecimal /NIOS2_INSTANCE_TOP/A_div_stall
 add wave -noupdate -format Logic -radix hexadecimal /NIOS2_INSTANCE_TOP/A_div_done
+add wave -noupdate -divider {controller_nios_0_cpu: Data TCM Stall}
+add wave -noupdate -format Logic -radix hexadecimal /NIOS2_INSTANCE_TOP/E_dtcm_port_hazard
+add wave -noupdate -format Logic -radix hexadecimal /NIOS2_INSTANCE_TOP/M_dtcm_port_hazard_pulse
+add wave -noupdate -format Logic -radix hexadecimal /NIOS2_INSTANCE_TOP/M_dtcm_raw_hazard
+add wave -noupdate -format Logic -radix hexadecimal /NIOS2_INSTANCE_TOP/A_mem_stall
+add wave -noupdate -format Logic -radix hexadecimal /NIOS2_INSTANCE_TOP/E_dtcm0_port_hazard
 add wave -noupdate -divider {controller_nios_0_cpu: data_master}
 add wave -noupdate -format Logic -radix hexadecimal /NIOS2_INSTANCE_TOP/d_address
 add wave -noupdate -format Logic -radix hexadecimal /NIOS2_INSTANCE_TOP/d_read_nxt
@@ -386,6 +410,17 @@ add wave -noupdate -format Logic -radix hexadecimal /NIOS2_INSTANCE_TOP/A_mem_st
 add wave -noupdate -format Logic -radix hexadecimal /NIOS2_INSTANCE_TOP/A_mem_stall_stop_nxt
 add wave -noupdate -format Logic -radix hexadecimal /NIOS2_INSTANCE_TOP/A_mem_stall_nxt
 add wave -noupdate -format Logic -radix hexadecimal /NIOS2_INSTANCE_TOP/A_mem_stall
+add wave -noupdate -divider {controller_nios_0_cpu: data_ram_ld_aligner}
+add wave -noupdate -format Logic -radix hexadecimal /NIOS2_INSTANCE_TOP/M_ctrl_ld16
+add wave -noupdate -format Logic -radix hexadecimal /NIOS2_INSTANCE_TOP/M_mem_baddr\[1\]
+add wave -noupdate -format Logic -radix hexadecimal /NIOS2_INSTANCE_TOP/M_mem_baddr\[0\]
+add wave -noupdate -format Logic -radix hexadecimal /NIOS2_INSTANCE_TOP/M_data_ram_ld_align_sign_bit
+add wave -noupdate -format Logic -radix hexadecimal /NIOS2_INSTANCE_TOP/A_data_ram_ld_align_fill_bit
+add wave -noupdate -format Logic -radix hexadecimal /NIOS2_INSTANCE_TOP/A_data_ram_ld_byte0_data
+add wave -noupdate -format Logic -radix hexadecimal /NIOS2_INSTANCE_TOP/A_data_ram_ld_byte1_data
+add wave -noupdate -format Logic -radix hexadecimal /NIOS2_INSTANCE_TOP/A_data_ram_ld_byte2_data
+add wave -noupdate -format Logic -radix hexadecimal /NIOS2_INSTANCE_TOP/A_data_ram_ld_byte3_data
+add wave -noupdate -format Logic -radix hexadecimal /NIOS2_INSTANCE_TOP/A_inst_result_aligned
 add wave -noupdate -divider {controller_nios_0_cpu: combinatorial_custom_instruction}
 add wave -noupdate -format Logic -radix hexadecimal /NIOS2_INSTANCE_TOP/E_ctrl_custom_combo
 add wave -noupdate -format Logic -radix hexadecimal /NIOS2_INSTANCE_TOP/E_ci_combo_dataa

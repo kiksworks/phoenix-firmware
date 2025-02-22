@@ -1,4 +1,4 @@
-//Legal Notice: (C)2021 Altera Corporation. All rights reserved.  Your
+//Legal Notice: (C)2025 Altera Corporation. All rights reserved.  Your
 //use of Altera Corporation's design tools, logic functions and other
 //software and tools, and its AMPP partner logic functions, and any
 //output files any of the foregoing (including device programming or
@@ -202,17 +202,19 @@ module controller_nios_0_cpu_nios2_oci_debug (
 
 
 wire             E_oci_sync_hbreak_req;
-reg              break_on_reset /* synthesis ALTERA_ATTRIBUTE = "SUPPRESS_DA_RULE_INTERNAL=\"D101,R101\""  */;
+reg              break_on_reset /* synthesis ALTERA_ATTRIBUTE = "SUPPRESS_DA_RULE_INTERNAL=\"D101,R101\"" preserve dont_replicate dont_retime ""  */;
 wire             debugack;
-reg              jtag_break /* synthesis ALTERA_ATTRIBUTE = "SUPPRESS_DA_RULE_INTERNAL=\"D101,R101\""  */;
-reg              monitor_error /* synthesis ALTERA_ATTRIBUTE = "SUPPRESS_DA_RULE_INTERNAL=D101"  */;
-reg              monitor_go /* synthesis ALTERA_ATTRIBUTE = "SUPPRESS_DA_RULE_INTERNAL=D101"  */;
-reg              monitor_ready /* synthesis ALTERA_ATTRIBUTE = "SUPPRESS_DA_RULE_INTERNAL=D101"  */;
+reg              jtag_break /* synthesis ALTERA_ATTRIBUTE = "SUPPRESS_DA_RULE_INTERNAL=\"D101,R101\"" preserve dont_replicate dont_retime ""  */;
+reg              monitor_error /* synthesis ALTERA_ATTRIBUTE = "SUPPRESS_DA_RULE_INTERNAL=\"D101\"" preserve dont_replicate dont_retime ""  */;
+reg              monitor_go /* synthesis ALTERA_ATTRIBUTE = "SUPPRESS_DA_RULE_INTERNAL=\"D101\"" preserve dont_replicate dont_retime ""  */;
+reg              monitor_ready /* synthesis ALTERA_ATTRIBUTE = "SUPPRESS_DA_RULE_INTERNAL=\"D101\"" preserve dont_replicate dont_retime ""  */;
 wire             oci_async_hbreak_req;
 wire             reset_sync;
-reg              resetlatch /* synthesis ALTERA_ATTRIBUTE = "SUPPRESS_DA_RULE_INTERNAL=\"D101,R101\""  */;
-reg              resetrequest /* synthesis ALTERA_ATTRIBUTE = "SUPPRESS_DA_RULE_INTERNAL=\"D101,R101\""  */;
+reg              resetlatch /* synthesis ALTERA_ATTRIBUTE = "SUPPRESS_DA_RULE_INTERNAL=\"D101,R101\"" preserve dont_replicate dont_retime ""  */;
+reg              resetrequest /* synthesis ALTERA_ATTRIBUTE = "SUPPRESS_DA_RULE_INTERNAL=\"D101,R101\"" preserve dont_replicate dont_retime ""  */;
+wire             st_ready_test_idle_sync;
 wire             unxcomplemented_resetxx0;
+wire             unxcomplemented_resetxx1;
   assign unxcomplemented_resetxx0 = jrst_n;
   altera_std_synchronizer the_altera_std_synchronizer
     (
@@ -223,6 +225,17 @@ wire             unxcomplemented_resetxx0;
     );
 
   defparam the_altera_std_synchronizer.depth = 2;
+
+  assign unxcomplemented_resetxx1 = jrst_n;
+  altera_std_synchronizer the_altera_std_synchronizer1
+    (
+      .clk (clk),
+      .din (st_ready_test_idle),
+      .dout (st_ready_test_idle_sync),
+      .reset_n (unxcomplemented_resetxx1)
+    );
+
+  defparam the_altera_std_synchronizer1.depth = 2;
 
   always @(posedge clk or negedge jrst_n)
     begin
@@ -275,7 +288,7 @@ wire             unxcomplemented_resetxx0;
               monitor_error <= 1'b1;
           if (take_action_ocimem_a && jdo[23])
               monitor_go <= 1'b1;
-          else if (st_ready_test_idle)
+          else if (st_ready_test_idle_sync)
               monitor_go <= 1'b0;
         end
     end
@@ -362,7 +375,7 @@ wire    [  1: 0] break_a_wpr_high_bits;
 wire    [  1: 0] break_a_wpr_low_bits;
 wire    [  1: 0] break_b_rr;
 wire    [  1: 0] break_c_rr;
-reg     [ 31: 0] break_readreg /* synthesis ALTERA_ATTRIBUTE = "SUPPRESS_DA_RULE_INTERNAL=\"D101,R101\""  */;
+reg     [ 31: 0] break_readreg /* synthesis ALTERA_ATTRIBUTE = "SUPPRESS_DA_RULE_INTERNAL=\"D101,R101\"" preserve dont_replicate dont_retime ""  */;
 wire             dbrk0_high_value;
 wire             dbrk0_low_value;
 wire             dbrk1_high_value;
@@ -376,18 +389,18 @@ wire             dbrk_hit1_latch;
 wire             dbrk_hit2_latch;
 wire             dbrk_hit3_latch;
 wire             take_action_any_break;
-reg              trigbrktype /* synthesis ALTERA_ATTRIBUTE = "SUPPRESS_DA_RULE_INTERNAL=\"D101,R101\""  */;
-reg              trigger_state;
+reg              trigbrktype /* synthesis ALTERA_ATTRIBUTE = "SUPPRESS_DA_RULE_INTERNAL=\"D101,R101\"" preserve dont_replicate dont_retime ""  */;
+reg              trigger_state /* synthesis ALTERA_ATTRIBUTE = "SUPPRESS_DA_RULE_INTERNAL=\"D101,R101\"" preserve dont_replicate dont_retime ""  */;
 wire             trigger_state_0;
 wire             trigger_state_1;
 wire    [ 31: 0] xbrk0_value;
 wire    [ 31: 0] xbrk1_value;
 wire    [ 31: 0] xbrk2_value;
 wire    [ 31: 0] xbrk3_value;
-reg     [  7: 0] xbrk_ctrl0 /* synthesis ALTERA_ATTRIBUTE = "SUPPRESS_DA_RULE_INTERNAL=\"D101,R101\""  */;
-reg     [  7: 0] xbrk_ctrl1 /* synthesis ALTERA_ATTRIBUTE = "SUPPRESS_DA_RULE_INTERNAL=\"D101,R101\""  */;
-reg     [  7: 0] xbrk_ctrl2 /* synthesis ALTERA_ATTRIBUTE = "SUPPRESS_DA_RULE_INTERNAL=\"D101,R101\""  */;
-reg     [  7: 0] xbrk_ctrl3 /* synthesis ALTERA_ATTRIBUTE = "SUPPRESS_DA_RULE_INTERNAL=\"D101,R101\""  */;
+reg     [  7: 0] xbrk_ctrl0 /* synthesis ALTERA_ATTRIBUTE = "SUPPRESS_DA_RULE_INTERNAL=\"D101,R101\"" preserve dont_replicate dont_retime ""  */;
+reg     [  7: 0] xbrk_ctrl1 /* synthesis ALTERA_ATTRIBUTE = "SUPPRESS_DA_RULE_INTERNAL=\"D101,R101\"" preserve dont_replicate dont_retime ""  */;
+reg     [  7: 0] xbrk_ctrl2 /* synthesis ALTERA_ATTRIBUTE = "SUPPRESS_DA_RULE_INTERNAL=\"D101,R101\"" preserve dont_replicate dont_retime ""  */;
+reg     [  7: 0] xbrk_ctrl3 /* synthesis ALTERA_ATTRIBUTE = "SUPPRESS_DA_RULE_INTERNAL=\"D101,R101\"" preserve dont_replicate dont_retime ""  */;
   assign break_a_wpr = jdo[35 : 32];
   assign break_a_wpr_high_bits = break_a_wpr[3 : 2];
   assign break_a_wpr_low_bits = break_a_wpr[1 : 0];
@@ -1147,7 +1160,7 @@ wire    [  6: 0] sync_timer_next;
 wire             sync_timer_reached_zero;
 wire    [ 15: 0] trc_ctrl;
 reg     [ 10: 0] trc_ctrl_reg /* synthesis ALTERA_ATTRIBUTE = "SUPPRESS_DA_RULE_INTERNAL=\"D101,D103,R101\""  */;
-wire             trc_on;
+reg              trc_on /* synthesis ALTERA_ATTRIBUTE = "SUPPRESS_DA_RULE_INTERNAL=\"R101\"" preserve dont_replicate dont_retime ""  */;
   assign is_cond_dct = A_op_bge  | A_op_blt | A_op_bne | A_op_bgeu | 
     A_op_bltu | A_op_beq;
 
@@ -1213,7 +1226,15 @@ wire             trc_on;
 
 
   assign trc_ctrl = 0;
-  assign trc_on = trc_ctrl[1] & (trc_ctrl[9] | not_in_debug_mode);
+  always @(posedge clk or negedge jrst_n)
+    begin
+      if (jrst_n == 0)
+          trc_on <= 0;
+      else 
+        trc_on <= trc_ctrl[1] & (trc_ctrl[9] | not_in_debug_mode);
+    end
+
+
 
 endmodule
 
@@ -2079,10 +2100,10 @@ module controller_nios_0_cpu_nios2_oci_im (
 wire             tracemem_on;
 wire    [ 35: 0] tracemem_trcdata;
 wire             tracemem_tw;
-reg     [  6: 0] trc_im_addr /* synthesis ALTERA_ATTRIBUTE = "SUPPRESS_DA_RULE_INTERNAL=\"D101,D103,R101\""  */;
+reg     [  6: 0] trc_im_addr /* synthesis ALTERA_ATTRIBUTE = "SUPPRESS_DA_RULE_INTERNAL=\"D101,D103,R101\"" preserve dont_replicate dont_retime ""  */;
 wire    [ 35: 0] trc_im_data;
 wire             trc_on_chip;
-reg              trc_wrap /* synthesis ALTERA_ATTRIBUTE = "SUPPRESS_DA_RULE_INTERNAL=\"D101,D103,R101\""  */;
+reg              trc_wrap /* synthesis ALTERA_ATTRIBUTE = "SUPPRESS_DA_RULE_INTERNAL=\"D101,D103,R101\"" preserve dont_replicate dont_retime ""  */;
 wire             tw_valid;
 wire             xbrk_wrap_traceoff;
   assign trc_im_data = tw;
@@ -2333,26 +2354,26 @@ module controller_nios_0_cpu_nios2_ocimem (
   input   [ 31: 0] writedata;
 
 
-reg     [ 10: 0] MonAReg /* synthesis ALTERA_ATTRIBUTE = "SUPPRESS_DA_RULE_INTERNAL=\"D101,D103,R101\""  */;
+reg     [ 10: 0] MonAReg /* synthesis ALTERA_ATTRIBUTE = "SUPPRESS_DA_RULE_INTERNAL=\"D101,D103,R101\"" preserve dont_replicate dont_retime ""  */;
 wire    [  8: 0] MonARegAddrInc;
 wire             MonARegAddrIncAccessingRAM;
-reg     [ 31: 0] MonDReg /* synthesis ALTERA_ATTRIBUTE = "SUPPRESS_DA_RULE_INTERNAL=\"D101,D103,R101\""  */;
-reg              avalon_ociram_readdata_ready /* synthesis ALTERA_ATTRIBUTE = "SUPPRESS_DA_RULE_INTERNAL=\"D101,D103,R101\""  */;
+reg     [ 31: 0] MonDReg /* synthesis ALTERA_ATTRIBUTE = "SUPPRESS_DA_RULE_INTERNAL=\"D101,D103,R101\"" preserve dont_replicate dont_retime ""  */;
+reg              avalon_ociram_readdata_ready /* synthesis ALTERA_ATTRIBUTE = "SUPPRESS_DA_RULE_INTERNAL=\"D101,D103,R101\"" preserve dont_replicate dont_retime ""  */;
 wire             avalon_ram_wr;
 wire    [ 31: 0] cfgrom_readdata;
-reg              jtag_ram_access /* synthesis ALTERA_ATTRIBUTE = "SUPPRESS_DA_RULE_INTERNAL=\"D101,D103,R101\""  */;
-reg              jtag_ram_rd /* synthesis ALTERA_ATTRIBUTE = "SUPPRESS_DA_RULE_INTERNAL=\"D101,D103,R101\""  */;
-reg              jtag_ram_rd_d1 /* synthesis ALTERA_ATTRIBUTE = "SUPPRESS_DA_RULE_INTERNAL=\"D101,D103,R101\""  */;
-reg              jtag_ram_wr /* synthesis ALTERA_ATTRIBUTE = "SUPPRESS_DA_RULE_INTERNAL=\"D101,D103,R101\""  */;
-reg              jtag_rd /* synthesis ALTERA_ATTRIBUTE = "SUPPRESS_DA_RULE_INTERNAL=\"D101,D103,R101\""  */;
-reg              jtag_rd_d1 /* synthesis ALTERA_ATTRIBUTE = "SUPPRESS_DA_RULE_INTERNAL=\"D101,D103,R101\""  */;
+reg              jtag_ram_access /* synthesis ALTERA_ATTRIBUTE = "SUPPRESS_DA_RULE_INTERNAL=\"D101,D103,R101\"" preserve dont_replicate dont_retime ""  */;
+reg              jtag_ram_rd /* synthesis ALTERA_ATTRIBUTE = "SUPPRESS_DA_RULE_INTERNAL=\"D101,D103,R101\"" preserve dont_replicate dont_retime ""  */;
+reg              jtag_ram_rd_d1 /* synthesis ALTERA_ATTRIBUTE = "SUPPRESS_DA_RULE_INTERNAL=\"D101,D103,R101\"" preserve dont_replicate dont_retime ""  */;
+reg              jtag_ram_wr /* synthesis ALTERA_ATTRIBUTE = "SUPPRESS_DA_RULE_INTERNAL=\"D101,D103,R101\"" preserve dont_replicate dont_retime ""  */;
+reg              jtag_rd /* synthesis ALTERA_ATTRIBUTE = "SUPPRESS_DA_RULE_INTERNAL=\"D101,D103,R101\"" preserve dont_replicate dont_retime ""  */;
+reg              jtag_rd_d1 /* synthesis ALTERA_ATTRIBUTE = "SUPPRESS_DA_RULE_INTERNAL=\"D101,D103,R101\"" preserve dont_replicate dont_retime ""  */;
 wire    [  7: 0] ociram_addr;
 wire    [  3: 0] ociram_byteenable;
 wire    [ 31: 0] ociram_readdata;
 wire             ociram_reset_req;
 wire    [ 31: 0] ociram_wr_data;
 wire             ociram_wr_en;
-reg              waitrequest /* synthesis ALTERA_ATTRIBUTE = "SUPPRESS_DA_RULE_INTERNAL=\"D101,D103,R101\""  */;
+reg              waitrequest /* synthesis ALTERA_ATTRIBUTE = "SUPPRESS_DA_RULE_INTERNAL=\"D101,D103,R101\"" preserve dont_replicate dont_retime ""  */;
   always @(posedge clk or negedge jrst_n)
     begin
       if (jrst_n == 0)
@@ -3038,10 +3059,12 @@ module controller_nios_0_cpu (
                                 debug_mem_slave_read,
                                 debug_mem_slave_write,
                                 debug_mem_slave_writedata,
+                                dtcm0_readdata,
                                 eic_port_data,
                                 eic_port_valid,
                                 i_readdata,
                                 i_waitrequest,
+                                itcm0_readdata,
                                 reset_n,
                                 reset_req,
 
@@ -3075,7 +3098,6 @@ module controller_nios_0_cpu (
                                 E_ci_combo_readrb,
                                 E_ci_combo_status,
                                 E_ci_combo_writerc,
-                                M_valid_ignoring_refetch,
                                 W_tb_eic_rha,
                                 W_tb_eic_ril,
                                 W_tb_eic_rnmi,
@@ -3090,8 +3112,17 @@ module controller_nios_0_cpu (
                                 debug_mem_slave_readdata,
                                 debug_mem_slave_waitrequest,
                                 debug_reset_request,
+                                dtcm0_address,
+                                dtcm0_byteenable,
+                                dtcm0_clken,
+                                dtcm0_read,
+                                dtcm0_write,
+                                dtcm0_writedata,
                                 i_address,
-                                i_read
+                                i_read,
+                                itcm0_address,
+                                itcm0_clken,
+                                itcm0_read
                              )
 ;
 
@@ -3124,7 +3155,6 @@ module controller_nios_0_cpu (
   output           E_ci_combo_readrb;
   output           E_ci_combo_status;
   output           E_ci_combo_writerc;
-  output           M_valid_ignoring_refetch;
   output  [ 31: 0] W_tb_eic_rha;
   output  [  5: 0] W_tb_eic_ril;
   output           W_tb_eic_rnmi;
@@ -3139,8 +3169,17 @@ module controller_nios_0_cpu (
   output  [ 31: 0] debug_mem_slave_readdata;
   output           debug_mem_slave_waitrequest;
   output           debug_reset_request;
+  output  [ 15: 0] dtcm0_address;
+  output  [  3: 0] dtcm0_byteenable;
+  output           dtcm0_clken;
+  output           dtcm0_read;
+  output           dtcm0_write;
+  output  [ 31: 0] dtcm0_writedata;
   output  [ 15: 0] i_address;
   output           i_read;
+  output  [ 14: 0] itcm0_address;
+  output           itcm0_clken;
+  output           itcm0_read;
   input            A_ci_multi_done;
   input   [ 31: 0] A_ci_multi_result;
   input   [ 31: 0] E_ci_combo_result;
@@ -3153,10 +3192,12 @@ module controller_nios_0_cpu (
   input            debug_mem_slave_read;
   input            debug_mem_slave_write;
   input   [ 31: 0] debug_mem_slave_writedata;
+  input   [ 31: 0] dtcm0_readdata;
   input   [ 44: 0] eic_port_data;
   input            eic_port_valid;
   input   [ 31: 0] i_readdata;
   input            i_waitrequest;
+  input   [ 31: 0] itcm0_readdata;
   input            reset_n;
   input            reset_req;
 
@@ -3346,6 +3387,12 @@ reg              A_ctrl_wrctl_inst;
 wire             A_ctrl_wrctl_inst_nxt;
 reg              A_data_master_started_stall;
 wire             A_data_master_stop_stall;
+wire    [ 15: 0] A_data_ram_ld16_data;
+reg              A_data_ram_ld_align_fill_bit;
+wire    [  7: 0] A_data_ram_ld_byte0_data;
+wire    [  7: 0] A_data_ram_ld_byte1_data;
+wire    [  7: 0] A_data_ram_ld_byte2_data;
+wire    [  7: 0] A_data_ram_ld_byte3_data;
 wire             A_dc_fill_done;
 wire             A_dc_want_fill;
 reg              A_div_done;
@@ -3358,6 +3405,7 @@ wire             A_div_valid;
 wire    [  4: 0] A_dst_regnum;
 reg     [  4: 0] A_dst_regnum_from_M;
 wire    [  1: 0] A_dst_regset;
+wire             A_dtcm0_want_wr;
 wire             A_dtcm_ld;
 wire             A_dtcm_st;
 reg     [ 15: 0] A_eic_rha;
@@ -3438,6 +3486,7 @@ reg     [ 15: 0] A_mem_baddr;
 reg     [  3: 0] A_mem_byte_en;
 reg              A_mem_stall;
 wire             A_mem_stall_nxt;
+reg              A_mem_stall_start_everyone_but_dtcm_port_hazard;
 wire             A_mem_stall_start_nxt;
 wire             A_mem_stall_stop_nxt;
 wire    [ 13: 0] A_mem_waddr;
@@ -3481,6 +3530,7 @@ wire             A_op_custom;
 wire             A_op_div;
 wire             A_op_divu;
 wire             A_op_eret;
+wire             A_op_float32to16_0;
 wire             A_op_flushd;
 wire             A_op_flushda;
 wire             A_op_flushi;
@@ -3588,6 +3638,7 @@ wire    [ 13: 0] A_pipe_flush_waddr_nxt;
 wire             A_refetch_required;
 reg              A_sel_data_master;
 wire             A_sel_dtcm;
+reg              A_sel_tightly_coupled_data_master_0;
 wire    [ 31: 0] A_shift_rot_bmx_result;
 reg     [ 31: 0] A_shift_rot_result;
 reg     [ 31: 0] A_slow_inst_result;
@@ -3781,6 +3832,7 @@ wire             D_op_custom;
 wire             D_op_div;
 wire             D_op_divu;
 wire             D_op_eret;
+wire             D_op_float32to16_0;
 wire             D_op_flushd;
 wire             D_op_flushda;
 wire             D_op_flushi;
@@ -4080,7 +4132,10 @@ wire    [ 31: 0] E_div_src1;
 wire    [ 31: 0] E_div_src2;
 wire             E_div_valid;
 reg     [  4: 0] E_dst_regnum;
+wire             E_dtcm0_port_hazard;
 wire             E_dtcm_ld;
+wire             E_dtcm_port_hazard;
+wire             E_dtcm_port_hazard_start_stall;
 wire             E_dtcm_st;
 wire             E_en;
 wire             E_eq;
@@ -4154,6 +4209,7 @@ wire             E_op_custom;
 wire             E_op_div;
 wire             E_op_divu;
 wire             E_op_eret;
+wire             E_op_float32to16_0;
 wire             E_op_flushd;
 wire             E_op_flushda;
 wire             E_op_flushi;
@@ -4270,6 +4326,7 @@ wire             E_rot_sel_fill3;
 wire    [ 31: 0] E_rot_step1;
 wire             E_sel_data_master;
 wire             E_sel_dtcm;
+wire             E_sel_tightly_coupled_data_master_0;
 reg     [ 31: 0] E_src1;
 wire             E_src1_corrupt;
 wire             E_src1_eq_src2;
@@ -4371,6 +4428,7 @@ wire             F_op_custom;
 wire             F_op_div;
 wire             F_op_divu;
 wire             F_op_eret;
+wire             F_op_float32to16_0;
 wire             F_op_flushd;
 wire             F_op_flushda;
 wire             F_op_flushi;
@@ -4477,6 +4535,7 @@ wire    [  6: 0] F_rf_rd_addr_a;
 wire    [  6: 0] F_rf_rd_addr_b;
 wire             F_sel_instruction_master;
 wire             F_sel_itcm;
+wire             F_sel_tightly_coupled_instruction_master_0;
 wire             F_stall;
 wire    [303: 0] F_vinst;
 reg     [ 31: 0] M_alu_result;
@@ -4644,6 +4703,10 @@ wire             M_ctrl_unsigned_lo_imm16_nxt;
 reg              M_ctrl_wrctl_inst;
 wire             M_ctrl_wrctl_inst_nxt;
 wire             M_data_master_start_stall;
+wire             M_data_ram_ld_align_fill_bit;
+wire             M_data_ram_ld_align_sign_bit;
+wire    [  1: 0] M_data_ram_ld_align_sign_bit_16;
+reg              M_data_ram_ld_align_sign_bit_16_hi;
 reg              M_div_negate_remainder;
 reg              M_div_negate_result;
 reg     [ 31: 0] M_div_src1;
@@ -4651,6 +4714,9 @@ reg     [ 31: 0] M_div_src2;
 wire             M_div_valid;
 reg     [  4: 0] M_dst_regnum;
 wire             M_dtcm_ld;
+reg              M_dtcm_port_hazard_pulse;
+wire             M_dtcm_port_hazard_stop_stall_unqualified;
+wire             M_dtcm_raw_hazard;
 wire             M_dtcm_st;
 wire             M_dtcm_st_non32;
 reg     [ 15: 0] M_eic_rha;
@@ -4751,6 +4817,7 @@ wire             M_op_custom;
 wire             M_op_div;
 wire             M_op_divu;
 wire             M_op_eret;
+wire             M_op_float32to16_0;
 wire             M_op_flushd;
 wire             M_op_flushda;
 wire             M_op_flushi;
@@ -4856,6 +4923,7 @@ wire    [ 15: 0] M_pipe_flush_baddr_nxt;
 wire             M_pipe_flush_nxt;
 reg     [ 13: 0] M_pipe_flush_waddr;
 wire    [ 13: 0] M_pipe_flush_waddr_nxt;
+wire    [ 31: 0] M_ram_rd_data;
 wire    [ 31: 0] M_rdctl_data;
 wire    [ 31: 0] M_rdctl_data_inst_result;
 wire    [ 31: 0] M_rdctl_data_latest;
@@ -4880,6 +4948,7 @@ reg              M_rot_sel_fill3;
 wire    [ 31: 0] M_rot_step2;
 reg              M_sel_data_master;
 wire             M_sel_dtcm;
+reg              M_sel_tightly_coupled_data_master_0;
 wire    [ 31: 0] M_src1;
 reg              M_src1_corrupt;
 wire    [ 31: 0] M_src2;
@@ -5209,6 +5278,7 @@ wire             W_op_custom;
 wire             W_op_div;
 wire             W_op_divu;
 wire             W_op_eret;
+wire             W_op_float32to16_0;
 wire             W_op_flushd;
 wire             W_op_flushda;
 wire             W_op_flushi;
@@ -5379,6 +5449,12 @@ reg     [ 31: 0] div_src2;
 reg              div_src2_eq_zero;
 reg              div_subtract;
 wire    [ 32: 0] div_sum;
+wire    [ 15: 0] dtcm0_address;
+wire    [  3: 0] dtcm0_byteenable;
+wire             dtcm0_clken;
+wire             dtcm0_read;
+wire             dtcm0_write;
+wire    [ 31: 0] dtcm0_writedata;
 wire    [ 31: 0] eic_port_data_rha;
 wire    [  5: 0] eic_port_data_ril;
 wire             eic_port_data_rnmi;
@@ -5396,6 +5472,9 @@ wire             i_read_nxt;
 wire             i_readdata_arrived;
 reg     [ 31: 0] i_readdata_d1;
 reg              i_readdata_d1_valid;
+wire    [ 14: 0] itcm0_address;
+wire             itcm0_clken;
+wire             itcm0_read;
 reg              latched_oci_tb_hbreak_req;
 wire             latched_oci_tb_hbreak_req_next;
 wire             mi_req;
@@ -5464,6 +5543,9 @@ reg              wait_for_one_post_bret_inst;
       .d_byteenable                  (d_byteenable),
       .d_read                        (d_read),
       .d_write                       (d_write),
+      .dtcm0_address                 (dtcm0_address),
+      .dtcm0_byteenable              (dtcm0_byteenable),
+      .dtcm0_write                   (dtcm0_write),
       .eic_port_data                 (eic_port_data),
       .eic_port_data_rha             (eic_port_data_rha),
       .eic_port_data_ril             (eic_port_data_ril),
@@ -5705,6 +5787,7 @@ reg              wait_for_one_post_bret_inst;
   assign F_op_intr = (F_iw_opx == 61) & F_is_opx_inst;
   assign F_op_crst = (F_iw_opx == 62) & F_is_opx_inst;
   assign F_op_opx_rsv63 = (F_iw_opx == 63) & F_is_opx_inst;
+  assign F_op_float32to16_0 = F_op_custom & ({F_iw_custom_n[7 : 0]} == 8'h0);
   assign F_op_nios_custom_instr_floating_point_2_0 = F_op_custom & ({F_iw_custom_n[7 : 4] , 4'b0} == 8'he0);
   assign F_op_nios_custom_instr_floating_point_2_0_1 = F_op_custom & ({F_iw_custom_n[7 : 3] , 3'b0} == 8'hf8);
   assign F_is_opx_inst = F_iw_op == 58;
@@ -5835,6 +5918,7 @@ reg              wait_for_one_post_bret_inst;
   assign D_op_intr = (D_iw_opx == 61) & D_is_opx_inst;
   assign D_op_crst = (D_iw_opx == 62) & D_is_opx_inst;
   assign D_op_opx_rsv63 = (D_iw_opx == 63) & D_is_opx_inst;
+  assign D_op_float32to16_0 = D_op_custom & ({D_iw_custom_n[7 : 0]} == 8'h0);
   assign D_op_nios_custom_instr_floating_point_2_0 = D_op_custom & ({D_iw_custom_n[7 : 4] , 4'b0} == 8'he0);
   assign D_op_nios_custom_instr_floating_point_2_0_1 = D_op_custom & ({D_iw_custom_n[7 : 3] , 3'b0} == 8'hf8);
   assign D_is_opx_inst = D_iw_op == 58;
@@ -5965,6 +6049,7 @@ reg              wait_for_one_post_bret_inst;
   assign E_op_intr = (E_iw_opx == 61) & E_is_opx_inst;
   assign E_op_crst = (E_iw_opx == 62) & E_is_opx_inst;
   assign E_op_opx_rsv63 = (E_iw_opx == 63) & E_is_opx_inst;
+  assign E_op_float32to16_0 = E_op_custom & ({E_iw_custom_n[7 : 0]} == 8'h0);
   assign E_op_nios_custom_instr_floating_point_2_0 = E_op_custom & ({E_iw_custom_n[7 : 4] , 4'b0} == 8'he0);
   assign E_op_nios_custom_instr_floating_point_2_0_1 = E_op_custom & ({E_iw_custom_n[7 : 3] , 3'b0} == 8'hf8);
   assign E_is_opx_inst = E_iw_op == 58;
@@ -6095,6 +6180,7 @@ reg              wait_for_one_post_bret_inst;
   assign M_op_intr = (M_iw_opx == 61) & M_is_opx_inst;
   assign M_op_crst = (M_iw_opx == 62) & M_is_opx_inst;
   assign M_op_opx_rsv63 = (M_iw_opx == 63) & M_is_opx_inst;
+  assign M_op_float32to16_0 = M_op_custom & ({M_iw_custom_n[7 : 0]} == 8'h0);
   assign M_op_nios_custom_instr_floating_point_2_0 = M_op_custom & ({M_iw_custom_n[7 : 4] , 4'b0} == 8'he0);
   assign M_op_nios_custom_instr_floating_point_2_0_1 = M_op_custom & ({M_iw_custom_n[7 : 3] , 3'b0} == 8'hf8);
   assign M_is_opx_inst = M_iw_op == 58;
@@ -6225,6 +6311,7 @@ reg              wait_for_one_post_bret_inst;
   assign A_op_intr = (A_iw_opx == 61) & A_is_opx_inst;
   assign A_op_crst = (A_iw_opx == 62) & A_is_opx_inst;
   assign A_op_opx_rsv63 = (A_iw_opx == 63) & A_is_opx_inst;
+  assign A_op_float32to16_0 = A_op_custom & ({A_iw_custom_n[7 : 0]} == 8'h0);
   assign A_op_nios_custom_instr_floating_point_2_0 = A_op_custom & ({A_iw_custom_n[7 : 4] , 4'b0} == 8'he0);
   assign A_op_nios_custom_instr_floating_point_2_0_1 = A_op_custom & ({A_iw_custom_n[7 : 3] , 3'b0} == 8'hf8);
   assign A_is_opx_inst = A_iw_op == 58;
@@ -6355,6 +6442,7 @@ reg              wait_for_one_post_bret_inst;
   assign W_op_intr = (W_iw_opx == 61) & W_is_opx_inst;
   assign W_op_crst = (W_iw_opx == 62) & W_is_opx_inst;
   assign W_op_opx_rsv63 = (W_iw_opx == 63) & W_is_opx_inst;
+  assign W_op_float32to16_0 = W_op_custom & ({W_iw_custom_n[7 : 0]} == 8'h0);
   assign W_op_nios_custom_instr_floating_point_2_0 = W_op_custom & ({W_iw_custom_n[7 : 4] , 4'b0} == 8'he0);
   assign W_op_nios_custom_instr_floating_point_2_0_1 = W_op_custom & ({W_iw_custom_n[7 : 3] , 3'b0} == 8'hf8);
   assign W_is_opx_inst = W_iw_op == 58;
@@ -6521,8 +6609,15 @@ reg              wait_for_one_post_bret_inst;
     end
 
 
-  assign F_sel_instruction_master = 1'b1;
-  assign F_iw = i_readdata_d1;
+  assign itcm0_address = F_pcb_nxt[14 : 0];
+  assign itcm0_read = 1'b1;
+  assign itcm0_clken = F_en;
+  assign {F_sel_instruction_master,F_sel_tightly_coupled_instruction_master_0} = ((F_pcb[15 : 0] >= 16'hb800))? 2'b10 :
+    2'b01;
+
+  assign F_iw = (F_sel_instruction_master)? i_readdata_d1 :
+    itcm0_readdata;
+
   assign D_br_cond_pred_taken = D_iw_imm16[15] | D_ctrl_br_always_pred_taken;
   assign D_br_pred_taken = D_ctrl_br & (D_ctrl_br_uncond | D_br_cond_pred_taken);
   assign D_br_pred_not_taken = D_ctrl_br_cond & !D_br_cond_pred_taken;
@@ -6736,7 +6831,9 @@ reg              wait_for_one_post_bret_inst;
   assign M_pipe_flush_nxt = E_br_mispredict | A_pipe_flush_nxt;
   assign M_pipe_flush_waddr_nxt = E_extra_pc;
   assign M_pipe_flush_baddr_nxt = {M_pipe_flush_waddr_nxt, 2'b00};
-  assign E_sel_data_master = 1'b1;
+  assign {E_sel_tightly_coupled_data_master_0,E_sel_data_master} = ((((E_mem_baddr[15 : 0] >= 16'h8000) && (E_mem_baddr[15 : 0] <= 16'h9fff))))? 2'b10 :
+    2'b01;
+
   assign E_sel_dtcm = ~E_sel_data_master;
   assign E_dtcm_ld = E_ctrl_ld & E_sel_dtcm;
   assign E_dtcm_st = E_ctrl_st & E_sel_dtcm & E_st_writes_mem;
@@ -6850,6 +6947,15 @@ reg              wait_for_one_post_bret_inst;
     end
 
 
+  always @(posedge clk or negedge reset_n)
+    begin
+      if (reset_n == 0)
+          M_sel_tightly_coupled_data_master_0 <= 0;
+      else if (M_en)
+          M_sel_tightly_coupled_data_master_0 <= E_sel_tightly_coupled_data_master_0;
+    end
+
+
   assign M_sel_dtcm = ~M_sel_data_master;
   assign M_dtcm_ld = M_ctrl_ld & M_sel_dtcm;
   assign M_dtcm_st = M_ctrl_st & M_sel_dtcm & M_st_writes_mem;
@@ -6884,11 +6990,13 @@ reg              wait_for_one_post_bret_inst;
 
   assign M_mem_waddr = M_mem_baddr[15 : 2];
   assign M_mem_waddr_phy = M_mem_baddr[15 : 2];
+  assign M_ram_rd_data = dtcm0_readdata;
   assign M_fwd_reg_data = M_alu_result;
   assign M_rdctl_data_latest = M_rdctl_data;
   assign M_rdctl_data_inst_result = M_ctrl_intr_inst ? W_status_reg : M_rdctl_data_latest;
   assign M_inst_result = (M_exc_any)? { M_pc_plus_one, 2'b00 } :
     (M_ctrl_rd_ctl_reg)? M_rdctl_data_inst_result :
+    (M_ctrl_ld)? M_ram_rd_data :
     M_alu_result;
 
   assign A_dc_want_fill = 1'b0;
@@ -6931,13 +7039,13 @@ reg              wait_for_one_post_bret_inst;
   assign M_exc_allowed = M_valid_from_E & ~M_ignore_exc;
   assign M_exc_higher_priority_than_tlb_data = 0;
   assign M_udtlb_refetch = 0;
-  assign M_refetch = 0;
+  assign M_refetch = M_dtcm_raw_hazard;
   assign M_non_flushing_wrctl = 0;
   assign A_pipe_flush_nxt = (((M_ctrl_flush_pipe_always & ~M_non_flushing_wrctl) | M_refetch | M_exc_any) & 
     M_valid_from_E & ~A_pipe_flush) | A_refetch_required;
 
   assign A_pipe_flush_waddr_nxt = (A_refetch_required)? A_pc :
-    (M_exc_break)? 15880 :
+    (M_exc_break)? 11784 :
     (M_exc_ext_intr)? M_eic_rha[15 : 2] :
     (M_exc_any)? 8 :
     (M_refetch)? M_pc :
@@ -7097,6 +7205,15 @@ reg              wait_for_one_post_bret_inst;
     end
 
 
+  always @(posedge clk or negedge reset_n)
+    begin
+      if (reset_n == 0)
+          A_sel_tightly_coupled_data_master_0 <= 0;
+      else if (A_en)
+          A_sel_tightly_coupled_data_master_0 <= M_sel_tightly_coupled_data_master_0;
+    end
+
+
   assign A_sel_dtcm = ~A_sel_data_master;
   assign A_dtcm_ld = A_ctrl_ld & A_sel_dtcm;
   assign A_dtcm_st = A_ctrl_st & A_sel_dtcm & A_st_writes_mem;
@@ -7198,7 +7315,7 @@ reg              wait_for_one_post_bret_inst;
     end
 
 
-  assign A_slow_inst_sel_nxt = A_en ? 0 : A_exc_wr_sstatus|A_ctrl_div|A_ctrl_custom_multi|A_ctrl_ld;
+  assign A_slow_inst_sel_nxt = A_en ? 0 : A_exc_wr_sstatus|A_ctrl_div|A_ctrl_custom_multi|(A_ctrl_ld & A_sel_data_master);
   always @(posedge clk or negedge reset_n)
     begin
       if (reset_n == 0)
@@ -7461,8 +7578,8 @@ defparam controller_nios_0_cpu_register_bank_b.lpm_file = "controller_nios_0_cpu
   assign E_sth_data = E_src2_reg[15 : 0];
   assign E_stw_data = E_src2_reg[31 : 0];
   assign E_stb_data = E_src2_reg[7 : 0];
-  assign E_st_data = (E_ctrl_mem8)? {E_stb_data, E_stb_data, E_stb_data, E_stb_data} :
-    (E_ctrl_mem16)? {E_sth_data, E_sth_data} :
+  assign E_st_data = ({E_ctrl_mem16, E_ctrl_mem8} == 2'b01)? {E_stb_data, E_stb_data, E_stb_data, E_stb_data} :
+    ({E_ctrl_mem16, E_ctrl_mem8} == 2'b10)? {E_sth_data, E_sth_data} :
     E_stw_data;
 
   assign E_mem_byte_en = ({E_ctrl_mem16, E_ctrl_mem8, E_mem_baddr[1 : 0]} == {2'b01, 2'b00})? 4'b0001 :
@@ -8182,6 +8299,43 @@ defparam controller_nios_0_cpu_register_bank_b.lpm_file = "controller_nios_0_cpu
     end
 
 
+  assign E_dtcm0_port_hazard = A_ctrl_st & A_st_writes_mem & A_valid & A_sel_tightly_coupled_data_master_0 &
+    E_ctrl_ld & E_valid & E_sel_tightly_coupled_data_master_0 & ~(M_exc_any & M_exc_allowed);
+
+  assign dtcm0_writedata = A_st_data;
+  assign dtcm0_byteenable = M_dtcm_port_hazard_pulse ? M_mem_byte_en : 
+    A_dtcm0_want_wr     ? A_mem_byte_en :
+    E_mem_byte_en;
+
+  assign A_dtcm0_want_wr = A_ctrl_st & A_st_writes_mem & A_valid & A_sel_tightly_coupled_data_master_0;
+  assign dtcm0_address = M_dtcm_port_hazard_pulse ? { 3'h4, M_mem_baddr[12 : 0] } : 
+    A_dtcm0_want_wr     ? { 3'h4, A_mem_baddr[12 : 0] } : 
+    { 3'h4, E_mem_baddr[12 : 0] };
+
+  assign dtcm0_write = (A_dtcm0_want_wr) & ~M_dtcm_port_hazard_pulse;
+  assign dtcm0_read = 1'b1;
+  assign dtcm0_clken = A_en | M_dtcm_port_hazard_pulse;
+  assign E_dtcm_port_hazard = E_dtcm0_port_hazard;
+  assign M_dtcm_raw_hazard = M_valid_ignoring_refetch & 
+    (
+    A_dtcm_st & A_valid & (M_mem_waddr == A_mem_waddr) &
+    (
+    (M_dtcm_ld & (0 | ((M_mem_byte_en & A_mem_byte_en) != 0))) |
+    (M_dtcm_st_non32 & 0)
+    )
+    );
+
+  assign E_dtcm_port_hazard_start_stall = E_dtcm_port_hazard;
+  assign M_dtcm_port_hazard_stop_stall_unqualified = M_dtcm_port_hazard_pulse;
+  always @(posedge clk or negedge reset_n)
+    begin
+      if (reset_n == 0)
+          M_dtcm_port_hazard_pulse <= 0;
+      else 
+        M_dtcm_port_hazard_pulse <= E_dtcm_port_hazard & M_en;
+    end
+
+
   always @(posedge clk or negedge reset_n)
     begin
       if (reset_n == 0)
@@ -8239,8 +8393,19 @@ defparam controller_nios_0_cpu_register_bank_b.lpm_file = "controller_nios_0_cpu
     end
 
 
-  assign A_mem_stall_start_nxt = A_en & (M_data_master_start_stall);
-  assign A_mem_stall_stop_nxt = A_data_master_stop_stall;
+  always @(posedge clk or negedge reset_n)
+    begin
+      if (reset_n == 0)
+          A_mem_stall_start_everyone_but_dtcm_port_hazard <= 0;
+      else if (A_en)
+          A_mem_stall_start_everyone_but_dtcm_port_hazard <= M_data_master_start_stall;
+    end
+
+
+  assign A_mem_stall_start_nxt = A_en & (M_data_master_start_stall|E_dtcm_port_hazard_start_stall);
+  assign A_mem_stall_stop_nxt = A_data_master_stop_stall|(M_dtcm_port_hazard_stop_stall_unqualified &
+    ~A_mem_stall_start_everyone_but_dtcm_port_hazard);
+
   assign A_mem_stall_nxt = A_mem_stall ? ~A_mem_stall_stop_nxt : A_mem_stall_start_nxt;
   always @(posedge clk or negedge reset_n)
     begin
@@ -8251,7 +8416,56 @@ defparam controller_nios_0_cpu_register_bank_b.lpm_file = "controller_nios_0_cpu
     end
 
 
-  assign A_inst_result_aligned = A_inst_result;
+  always @(posedge clk or negedge reset_n)
+    begin
+      if (reset_n == 0)
+          M_data_ram_ld_align_sign_bit_16_hi <= 0;
+      else if (M_en)
+          M_data_ram_ld_align_sign_bit_16_hi <= (E_mem_baddr[0]) | E_ctrl_ld16;
+    end
+
+
+  assign M_data_ram_ld_align_sign_bit_16 = M_mem_baddr[1] ? 
+    {M_ram_rd_data[31], M_ram_rd_data[23]} : 
+    {M_ram_rd_data[15], M_ram_rd_data[7]};
+
+  assign M_data_ram_ld_align_sign_bit = M_data_ram_ld_align_sign_bit_16_hi ?
+    M_data_ram_ld_align_sign_bit_16[1] : 
+    M_data_ram_ld_align_sign_bit_16[0];
+
+  assign M_data_ram_ld_align_fill_bit = M_data_ram_ld_align_sign_bit & M_ctrl_ld_signed;
+  always @(posedge clk or negedge reset_n)
+    begin
+      if (reset_n == 0)
+          A_data_ram_ld_align_fill_bit <= 0;
+      else if (A_en)
+          A_data_ram_ld_align_fill_bit <= M_data_ram_ld_align_fill_bit;
+    end
+
+
+  assign A_data_ram_ld16_data = A_ld_align_sh16 ? 
+    A_inst_result[31 : 16] :
+    A_inst_result[15 : 0];
+
+  assign A_data_ram_ld_byte0_data = A_ld_align_sh8 ? 
+    A_data_ram_ld16_data[15 : 8] :
+    A_data_ram_ld16_data[7 : 0];
+
+  assign A_data_ram_ld_byte1_data = A_ld_align_byte1_fill ? 
+    {8 {A_data_ram_ld_align_fill_bit}} : 
+    A_data_ram_ld16_data[15 : 8];
+
+  assign A_data_ram_ld_byte2_data = A_ld_align_byte2_byte3_fill ? 
+    {8 {A_data_ram_ld_align_fill_bit}} : 
+    A_inst_result[23 : 16];
+
+  assign A_data_ram_ld_byte3_data = A_ld_align_byte2_byte3_fill ? 
+    {8 {A_data_ram_ld_align_fill_bit}} : 
+    A_inst_result[31 : 24];
+
+  assign A_inst_result_aligned = {A_data_ram_ld_byte3_data, A_data_ram_ld_byte2_data, 
+    A_data_ram_ld_byte1_data, A_data_ram_ld_byte0_data};
+
   altera_nios2_gen2_rtl_module the_nios2_rtl
     (
       .A_cancel (A_cancel),
@@ -9222,7 +9436,7 @@ defparam controller_nios_0_cpu_register_bank_b.lpm_file = "controller_nios_0_cpu
     end
 
 
-  assign D_ctrl_custom_multi = D_op_nios_custom_instr_floating_point_2_0_1;
+  assign D_ctrl_custom_multi = D_op_float32to16_0|D_op_nios_custom_instr_floating_point_2_0_1;
   assign E_ctrl_custom_multi_nxt = D_ctrl_custom_multi;
   always @(posedge clk or negedge reset_n)
     begin
@@ -12792,6 +13006,7 @@ defparam controller_nios_0_cpu_register_bank_b.lpm_file = "controller_nios_0_cpu
     D_op_opx_rsv42|
     D_op_opx_rsv43|
     D_op_rdctl|
+    D_op_float32to16_0|
     D_op_nios_custom_instr_floating_point_2_0_1|
     D_op_muli|
     D_op_mul|
@@ -13064,6 +13279,8 @@ defparam controller_nios_0_cpu_register_bank_b.lpm_file = "controller_nios_0_cpu
   assign A_exc_record_baddr = 0;
   //data_master, which is an e_avalon_master
   //instruction_master, which is an e_avalon_master
+  //tightly_coupled_data_master_0, which is an e_avalon_master
+  //tightly_coupled_instruction_master_0, which is an e_avalon_master
 
 //synthesis translate_off
 //////////////// SIMULATION-ONLY CONTENTS
@@ -13154,6 +13371,7 @@ defparam controller_nios_0_cpu_register_bank_b.lpm_file = "controller_nios_0_cpu
     (F_op_sub)? 304'h2020202020202020202020202020202020202020202020202020202020202020202020737562 :
     (F_op_srai)? 304'h2020202020202020202020202020202020202020202020202020202020202020202073726169 :
     (F_op_sra)? 304'h2020202020202020202020202020202020202020202020202020202020202020202020737261 :
+    (F_op_float32to16_0)? 304'h20202020202020202020202020202020202020202020202020666c6f61743332746f31365f30 :
     (F_op_nios_custom_instr_floating_point_2_0)? 304'h20206e696f735f637573746f6d5f696e7374725f666c6f6174696e675f706f696e745f325f30 :
     (F_op_nios_custom_instr_floating_point_2_0_1)? 304'h6e696f735f637573746f6d5f696e7374725f666c6f6174696e675f706f696e745f325f305f31 :
     304'h2020202020202020202020202020202020202020202020202020202020202020202020424144;
@@ -13245,6 +13463,7 @@ defparam controller_nios_0_cpu_register_bank_b.lpm_file = "controller_nios_0_cpu
     (D_op_sub)? 304'h2020202020202020202020202020202020202020202020202020202020202020202020737562 :
     (D_op_srai)? 304'h2020202020202020202020202020202020202020202020202020202020202020202073726169 :
     (D_op_sra)? 304'h2020202020202020202020202020202020202020202020202020202020202020202020737261 :
+    (D_op_float32to16_0)? 304'h20202020202020202020202020202020202020202020202020666c6f61743332746f31365f30 :
     (D_op_nios_custom_instr_floating_point_2_0)? 304'h20206e696f735f637573746f6d5f696e7374725f666c6f6174696e675f706f696e745f325f30 :
     (D_op_nios_custom_instr_floating_point_2_0_1)? 304'h6e696f735f637573746f6d5f696e7374725f666c6f6174696e675f706f696e745f325f305f31 :
     304'h2020202020202020202020202020202020202020202020202020202020202020202020424144;
@@ -13336,6 +13555,7 @@ defparam controller_nios_0_cpu_register_bank_b.lpm_file = "controller_nios_0_cpu
     (E_op_sub)? 304'h2020202020202020202020202020202020202020202020202020202020202020202020737562 :
     (E_op_srai)? 304'h2020202020202020202020202020202020202020202020202020202020202020202073726169 :
     (E_op_sra)? 304'h2020202020202020202020202020202020202020202020202020202020202020202020737261 :
+    (E_op_float32to16_0)? 304'h20202020202020202020202020202020202020202020202020666c6f61743332746f31365f30 :
     (E_op_nios_custom_instr_floating_point_2_0)? 304'h20206e696f735f637573746f6d5f696e7374725f666c6f6174696e675f706f696e745f325f30 :
     (E_op_nios_custom_instr_floating_point_2_0_1)? 304'h6e696f735f637573746f6d5f696e7374725f666c6f6174696e675f706f696e745f325f305f31 :
     304'h2020202020202020202020202020202020202020202020202020202020202020202020424144;
@@ -13427,6 +13647,7 @@ defparam controller_nios_0_cpu_register_bank_b.lpm_file = "controller_nios_0_cpu
     (M_op_sub)? 304'h2020202020202020202020202020202020202020202020202020202020202020202020737562 :
     (M_op_srai)? 304'h2020202020202020202020202020202020202020202020202020202020202020202073726169 :
     (M_op_sra)? 304'h2020202020202020202020202020202020202020202020202020202020202020202020737261 :
+    (M_op_float32to16_0)? 304'h20202020202020202020202020202020202020202020202020666c6f61743332746f31365f30 :
     (M_op_nios_custom_instr_floating_point_2_0)? 304'h20206e696f735f637573746f6d5f696e7374725f666c6f6174696e675f706f696e745f325f30 :
     (M_op_nios_custom_instr_floating_point_2_0_1)? 304'h6e696f735f637573746f6d5f696e7374725f666c6f6174696e675f706f696e745f325f305f31 :
     304'h2020202020202020202020202020202020202020202020202020202020202020202020424144;
@@ -13518,6 +13739,7 @@ defparam controller_nios_0_cpu_register_bank_b.lpm_file = "controller_nios_0_cpu
     (A_op_sub)? 304'h2020202020202020202020202020202020202020202020202020202020202020202020737562 :
     (A_op_srai)? 304'h2020202020202020202020202020202020202020202020202020202020202020202073726169 :
     (A_op_sra)? 304'h2020202020202020202020202020202020202020202020202020202020202020202020737261 :
+    (A_op_float32to16_0)? 304'h20202020202020202020202020202020202020202020202020666c6f61743332746f31365f30 :
     (A_op_nios_custom_instr_floating_point_2_0)? 304'h20206e696f735f637573746f6d5f696e7374725f666c6f6174696e675f706f696e745f325f30 :
     (A_op_nios_custom_instr_floating_point_2_0_1)? 304'h6e696f735f637573746f6d5f696e7374725f666c6f6174696e675f706f696e745f325f305f31 :
     304'h2020202020202020202020202020202020202020202020202020202020202020202020424144;
@@ -13609,6 +13831,7 @@ defparam controller_nios_0_cpu_register_bank_b.lpm_file = "controller_nios_0_cpu
     (W_op_sub)? 304'h2020202020202020202020202020202020202020202020202020202020202020202020737562 :
     (W_op_srai)? 304'h2020202020202020202020202020202020202020202020202020202020202020202073726169 :
     (W_op_sra)? 304'h2020202020202020202020202020202020202020202020202020202020202020202020737261 :
+    (W_op_float32to16_0)? 304'h20202020202020202020202020202020202020202020202020666c6f61743332746f31365f30 :
     (W_op_nios_custom_instr_floating_point_2_0)? 304'h20206e696f735f637573746f6d5f696e7374725f666c6f6174696e675f706f696e745f325f30 :
     (W_op_nios_custom_instr_floating_point_2_0_1)? 304'h6e696f735f637573746f6d5f696e7374725f666c6f6174696e675f706f696e745f325f305f31 :
     304'h2020202020202020202020202020202020202020202020202020202020202020202020424144;

@@ -1,4 +1,4 @@
-//Legal Notice: (C)2021 Altera Corporation. All rights reserved.  Your
+//Legal Notice: (C)2025 Altera Corporation. All rights reserved.  Your
 //use of Altera Corporation's design tools, logic functions and other
 //software and tools, and its AMPP partner logic functions, and any
 //output files any of the foregoing (including device programming or
@@ -37,6 +37,7 @@
 //LSBFIRST: 0
 //EXTRADELAY: 0
 //TARGETSSDELAY: 0
+//ds_data_wr_strobe is not generated for master mode.
 
 module controller_spim_0 (
                            // inputs:
