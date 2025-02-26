@@ -1,3 +1,4 @@
+!/*.qsys
 /.qsys_edit
 /db
 /incremental_db
@@ -7,4 +8,20 @@
 !/output_files/*.sof
 *.tcl~
 *.log
+*.sopcinfo
+*.qws
+*.rpt
+*.pdf
+*.qsf
+*.sdc
+*.srf
+
+/controller
+
 /software/.metadata
+/software/RemoteSystemsTempFiles
+software/controller_bsp
+software/controller/*
+!/software/controller/source/
+!/software/controller/Makefile
+
