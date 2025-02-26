@@ -7,7 +7,7 @@
 
 // Unipolar Deglitch Circuit for Synchronized Input
 module deglitch #(
-        parameter int COUNTER_VALUE = 1,
+        parameter int COUNTER_VALUE = 13'd100000,
         parameter int COUNTER_WIDTH = $clog2(COUNTER_VALUE + 1),
         parameter int DEFAULT_LOGIC = 0
     ) (
