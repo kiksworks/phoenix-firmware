@@ -19,10 +19,10 @@ static constexpr float SIGMA_VELOCITY_X = 0.01f;
 static constexpr float SIGMA_VELOCITY_Y = 0.01f;
 
 /// 車輪速度の標準偏差 [m/s]
-static constexpr float SIGMA_VELOCITY_OMEGA = 0.005f;
+static constexpr float SIGMA_VELOCITY_OMEGA = 0.001f;
 
 /// 加速度センサーの標準偏差 [m/s^2]
-static constexpr float SIGMA_ACCELEROMETER = 0.005f;
+static constexpr float SIGMA_ACCELEROMETER = 0.001f;
 
 /// ジャイロセンサーの標準偏差 [rad/s]
 static constexpr float SIGMA_GYROSCOPE = 0.005f;
@@ -37,7 +37,7 @@ void SimpleVelocityFilter::update(const Eigen::Vector3f& accel, const Eigen::Vec
     constexpr float DT = 1.0f / IMU_OUTPUT_RATE;
     constexpr float q_acc = powf(SIGMA_ACCELEROMETER, 2) * DT;
     constexpr float q_gyro = powf(SIGMA_GYROSCOPE, 2) * DT;
-    constexpr float r_x = powf(SIGMA_VELOCITY_X, 2);
+    constexpr float r_x = powf(SIGMA_VELOCITY_X, 2) * DT;
     constexpr float r_y = powf(SIGMA_VELOCITY_Y, 2) * DT;
     constexpr float r_omega = powf(SIGMA_VELOCITY_OMEGA, 2) * DT;
 
