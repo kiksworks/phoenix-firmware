@@ -155,6 +155,12 @@ private:
     /// IMUとエンコーダから車体速度を求めるシンプルなカルマンフィルタ
     static SimpleVelocityFilter _simple_velocity_filter;
 
+    /// 現在の指令車体角度
+    float _ref_body_theta;
+
+    /// 現在の車体速度（積分誤差あり）
+    float _body_theta;
+
     /// IMUの値をフィルタリングするLPF
     //static Lpf2ndOrder200 _imu_lpf[3];
 

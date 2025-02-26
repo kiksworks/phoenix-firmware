@@ -241,11 +241,17 @@ void WheelController::update(bool new_parameters, bool sensor_only) {
         Vector4f ref_body_velocity = {parameters.speed_x, parameters.speed_y, parameters.speed_omega, 0.0f};
 
 #if USE_SIMPLE_CONTROL
+        _ref_body_theta += parameters.speed_omega/IMU_OUTPUT_RATE;
+        _body_theta += bodyVelocity()[2]/IMU_OUTPUT_RATE;
+        float error = _ref_body_theta - _body_theta;
+        static const float theta_p_gain = 0.1f;
+        ref_body_velocity(2) = theta_p_gain * error;
+        
         Vector4f ref_wheel_velocity = velocityVectorDecomposition(ref_body_velocity);
         for (int index = 0; index < 4; index++) {
             float error = ref_wheel_velocity(index) - wheel_velocity(index);
-            static const float p_gain = 5.0f;
-            static const float i_gain = 0.05f;
+            static const float p_gain = parameters.speed_gain_p[index];
+            static const float i_gain = parameters.speed_gain_i[index];
             float current = _ref_wheel_current(index) + p_gain * _error_hpf[index](error) + i_gain * error;
             _ref_wheel_current(index) = fpu::clamp(current, -MAX_CURRENT_LIMIT_PER_MOTOR, MAX_CURRENT_LIMIT_PER_MOTOR);
         }
