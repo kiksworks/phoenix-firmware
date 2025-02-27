@@ -146,6 +146,7 @@ void WheelController::initializeState(void) {
     _ref_body_accel.setZero();
     _ref_wheel_current.setZero();
     _regeneration_energy.setZero();
+    _omega_integral = 0;
 }
 
 void WheelController::initializeRegisters(void) {
@@ -241,9 +242,16 @@ void WheelController::update(bool new_parameters, bool sensor_only) {
         Vector4f ref_body_velocity = {parameters.speed_x, parameters.speed_y, parameters.speed_omega, 0.0f};
 
 #if USE_SIMPLE_CONTROL
+        float w_kp = parameters.speed_gain_p[2];
+        float w_ki = parameters.speed_gain_i[2];
+        
+        float error = ref_body_velocity(2) - motion.gyroscope.z();
+        _omega_integral += error;
+        ref_body_velocity(2) = error * w_kp + _omega_integral * w_ki;
+
         Vector4f ref_wheel_velocity = velocityVectorDecomposition(ref_body_velocity);
         for (int index = 0; index < 4; index++) {
-            float error = ref_wheel_velocity(index) - wheel_velocity(index);
+            float error = ref_wheel_velocity(index)- wheel_velocity(index);
             static const float p_gain = 5.0f;
             static const float i_gain = 0.05f;
             float current = _ref_wheel_current(index) + p_gain * _error_hpf[index](error) + i_gain * error;
@@ -368,6 +376,8 @@ Hpf1stOrder5 WheelController::_error_hpf[4];
 //Eigen::Vector3f WheelController::_acc_filted;
 //Eigen::Vector4f WheelController::_current_filted;
 //Eigen::Vector4f WheelController::_wheel_vel_filted;
+float WheelController::_omega_integral;
+float WheelController::_ref_body_omega;
 Eigen::Vector4f WheelController::_ref_body_accel;
 Eigen::Vector4f WheelController::_ref_wheel_current;
 Eigen::Vector4f WheelController::_regeneration_energy;

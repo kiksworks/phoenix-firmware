@@ -174,6 +174,12 @@ private:
 
     //static Eigen::Vector4f _wheel_vel_filted;
 
+    /// 車体角速度PI制御の角速度指令
+    static float _ref_body_omega;
+
+    /// PI制御の積分用の変数
+    static float _omega_integral;
+
     /// 車体加速度の指令値
     static Eigen::Vector4f _ref_body_accel;
 
