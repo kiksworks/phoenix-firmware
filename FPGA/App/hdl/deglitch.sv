@@ -7,7 +7,7 @@
 
 // Unipolar Deglitch Circuit for Synchronized Input
 module deglitch #(
-        parameter int COUNTER_VALUE = 13'd100000,
+        parameter int COUNTER_VALUE = 64'hFFFFFFFFFFFFFFFF,
         parameter int COUNTER_WIDTH = $clog2(COUNTER_VALUE + 1),
         parameter int DEFAULT_LOGIC = 0
     ) (
@@ -36,7 +36,7 @@ endmodule
 
 // Bipolar Deglitch Circuit for Clock Synchronized Input
 module bipolar_sync_deglitch #(
-        parameter int DELAY = 1,
+        parameter int DELAY = 64'hFFFFFFFFFFFFFFFF,
         parameter int DEFAULT_OUTPUT = 0
     ) (
         input  wire reset,
